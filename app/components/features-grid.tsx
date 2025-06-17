@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 
 const features = [
   {
@@ -36,19 +34,10 @@ const features = [
 ];
 
 export function FeaturesGrid() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto">
-        <motion.div
-          ref={ref}
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">
             <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Typography Intelligence Features
@@ -57,37 +46,28 @@ export function FeaturesGrid() {
           <p className="text-gray-400 max-w-2xl mx-auto">
             Comprehensive tools to transform your font management into a strategic advantage
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ 
-                duration: 0.6,
-                delay: index * 0.1,
-              }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="glass-card rounded-2xl p-6 h-full relative overflow-hidden group"
             >
-              <motion.div
-                className="glass-card rounded-2xl p-6 h-full relative overflow-hidden group"
-                whileHover={{ y: -4, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                {/* Gradient accent bar */}
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} opacity-70`} />
-                
-                <div className="pt-2">
-                  <h3 className="text-lg font-semibold mb-3 text-white">{feature.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
+              {/* Gradient accent bar */}
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} opacity-70`} />
+              
+              <div className="pt-2">
+                <h3 className="text-lg font-semibold mb-3 text-white">{feature.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
 
-                {/* Subtle hover gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none`} />
-              </motion.div>
+              {/* Subtle hover gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none`} />
             </motion.div>
           ))}
         </div>
