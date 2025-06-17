@@ -1,7 +1,9 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useParams, Link } from "@remix-run/react";
+import { useLoaderData, useParams } from "@remix-run/react";
+import { motion } from "framer-motion";
 import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
+import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
 
@@ -29,7 +31,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function CompanyDashboard() {
-  const { company } = useLoaderData<typeof loader>();
+  const { company, fontUsage, metrics } = useLoaderData<typeof loader>();
   const params = useParams();
 
   // Use stats from company data
@@ -74,27 +76,47 @@ export default function CompanyDashboard() {
       <main className="container mx-auto px-4 py-8">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="glass rounded-xl p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="glass rounded-xl p-6"
+          >
             <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
             <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
-          </div>
+          </motion.div>
 
-          <div className="glass rounded-xl p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass rounded-xl p-6"
+          >
             <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
             <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
-          </div>
+          </motion.div>
 
-          <div className="glass rounded-xl p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="glass rounded-xl p-6"
+          >
             <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
             <div className="text-3xl font-bold text-white">{riskScore}%</div>
             <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Font Overview */}
-        <div className="glass rounded-xl p-6 mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="glass rounded-xl p-6 mb-8"
+        >
           <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
@@ -114,27 +136,37 @@ export default function CompanyDashboard() {
               <div className="text-sm text-gray-400">Enrichment Rate</div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Persona Views */}
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
           <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {personas.map((persona) => (
+            {personas.map((persona, index) => (
               <Link
                 key={persona.id}
                 to={`/dashboard/${params.company}/${persona.id}`}
                 className="block"
               >
-                <div className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all transform hover:scale-105">
-                  <persona.icon className="w-8 h-8 text-blue-400 mb-3" />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 + index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all"
+                >
+                  <persona.icon className="w-8 h-8 text-primary mb-3" />
                   <h3 className="font-semibold text-white mb-2">{persona.name}</h3>
                   <p className="text-sm text-gray-400">View tailored insights</p>
-                </div>
+                </motion.div>
               </Link>
             ))}
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
   );
