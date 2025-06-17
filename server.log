@@ -1,0 +1,3 @@
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+  ➜  Local:   http://localhost:3005/
+  ➜  Network: http://10.168.168.182:3005/

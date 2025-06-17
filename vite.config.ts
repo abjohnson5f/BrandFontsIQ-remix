@@ -5,6 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   server: {
     port: 3005,
+    host: '127.0.0.1', // Force IPv4 only
   },
   plugins: [
     remix({
@@ -12,6 +13,8 @@ export default defineConfig({
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
         v3_throwAbortReason: true,
+        v3_singleFetch: true,
+        v3_lazyRouteDiscovery: true,
       },
     }),
     tsconfigPaths(),
