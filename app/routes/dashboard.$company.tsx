@@ -7,16 +7,19 @@ import { Header } from "~/components/header";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
+  
+  console.log('Dashboard loader - companySlug:', companySlug);
+  console.log('Available companies:', companiesData.map(c => c.schema_name));
 
   if (!companySlug) {
-    throw new Response("Company not found", { status: 404 });
+    throw new Response("Company not found - no slug provided", { status: 404 });
   }
 
   // Find company from our temporary data
   const company = companiesData.find(c => c.schema_name === companySlug);
   
   if (!company) {
-    throw new Response("Company not found", { status: 404 });
+    throw new Response(`Company not found: ${companySlug}`, { status: 404 });
   }
 
   // TODO: Replace with real font data from Supabase
