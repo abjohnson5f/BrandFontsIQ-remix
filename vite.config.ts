@@ -1,11 +1,14 @@
 import { vitePlugin as remix } from "@remix-run/dev";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  return {
   server: {
     port: 3005,
-    host: '127.0.0.1', // Force IPv4 only
+    host: true, // Allow external connections in Codespaces
   },
   plugins: [
     remix({
@@ -19,4 +22,10 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  define: {
+    'process.env.SUPABASE_URL': JSON.stringify(env.SUPABASE_URL || ''),
+    'process.env.SUPABASE_ANON_KEY': JSON.stringify(env.SUPABASE_ANON_KEY || ''),
+    'process.env.SUPABASE_SERVICE_ROLE_KEY': JSON.stringify(env.SUPABASE_SERVICE_ROLE_KEY || ''),
+  },
+  };
 });
