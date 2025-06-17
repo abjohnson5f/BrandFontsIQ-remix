@@ -8,6 +8,7 @@ import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
 import { Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { FeaturesGrid } from "~/components/features-grid";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // TODO: Replace with real Supabase data once gateway functions are accessible
@@ -157,6 +158,9 @@ export default function Index() {
           </motion.div>
         </div>
       </section>
+
+      {/* Features Grid */}
+      <FeaturesGrid />
 
       {/* Company Showcase */}
       <section className="py-20 px-4">
