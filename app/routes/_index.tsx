@@ -1,9 +1,11 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Link } from "@remix-run/react";
+import { Upload } from "lucide-react";
+import { Header } from "~/components/header";
+import { Button } from "~/components/ui/button";
 import { companiesData } from "~/lib/companies-data";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -13,10 +15,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   
   return json({ companies: companiesData });
 }
-
-import { Header } from "~/components/header";
-import { Upload } from "lucide-react";
-import { Button } from "~/components/ui/button";
 
 export default function Index() {
   const { companies } = useLoaderData<typeof loader>();
