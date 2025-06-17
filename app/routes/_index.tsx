@@ -102,15 +102,27 @@ export default function Index() {
                 Typography Intelligence
               </span>
               <br />
-              <span className="text-foreground">
+              <motion.span
+                className="text-foreground"
+                initial={isClient ? { scale: 0.95, filter: 'brightness(0.7)' } : {}}
+                animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                style={{ willChange: 'auto', zIndex: 1 }}
+              >
                 for Modern Enterprises
-              </span>
+              </motion.span>
             </h1>
 
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <motion.p
+              className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+              initial={isClient ? { scale: 0.95, y: 20, filter: 'brightness(0.7)' } : {}}
+              animate={isClient ? { scale: 1, y: 0, filter: 'brightness(1)' } : {}}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              style={{ willChange: 'auto', zIndex: 1 }}
+            >
               Transform your font data into actionable insights. Manage licensing, 
               track usage, and optimize your typography strategy with AI-powered analytics.
-            </p>
+            </motion.p>
           </div>
         </div>
       </section>
@@ -118,7 +130,13 @@ export default function Index() {
       {/* Upload Data Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
-          <div className="glass-card rounded-2xl p-8 text-center">
+          <motion.div
+            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            style={{ willChange: 'auto', zIndex: 1 }}
+            className="glass-card rounded-2xl p-8 text-center"
+          >
             <h2 className="text-2xl font-bold mb-4">Get Started with Your Font Data</h2>
             <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
               Upload your font inventory data to create a personalized typography intelligence dashboard 
@@ -131,14 +149,20 @@ export default function Index() {
             <p className="mt-6 text-sm text-gray-500">
               Supports Excel, CSV, and JSON formats • Secure processing • No data stored
             </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Company Showcase */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <motion.div
+            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            style={{ willChange: 'auto', zIndex: 1 }}
+            className="text-center mb-12"
+          >
             <h2 className="text-3xl font-bold mb-4">
               <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                 Live Dataset: Typography Patterns Across Industries
@@ -147,7 +171,7 @@ export default function Index() {
             <p className="text-gray-400 max-w-2xl mx-auto">
               Analyzing real font data from {companies.length} major companies to showcase the potential of typography intelligence
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {companies.map((company, index) => (
@@ -157,10 +181,17 @@ export default function Index() {
                 className="block"
               >
                 <motion.div
+                  initial={isClient ? { scale: 0.9, filter: 'brightness(0.8)' } : {}}
+                  animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+                  transition={{ 
+                    delay: 0.7 + index * 0.05,
+                    duration: 0.5
+                  }}
                   whileHover={isClient ? { scale: 1.05 } : {}}
                   onHoverStart={() => setHoveredIndex(index)}
                   onHoverEnd={() => setHoveredIndex(null)}
                   className="relative group cursor-pointer"
+                  style={{ willChange: 'auto', zIndex: 1 }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300" />
                   <div className="relative glass-card rounded-2xl p-6 text-center transition-all duration-300">
@@ -179,6 +210,7 @@ export default function Index() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           className="absolute left-1/2 -translate-x-1/2 -bottom-20 bg-gray-900 border border-gray-700 rounded-lg p-3 z-10 whitespace-nowrap"
+                          style={{ willChange: 'auto' }}
                         >
                           <div className="text-xs text-gray-400">
                             <div>Unique fonts: {company.stats.unique_fonts.toLocaleString()}</div>
@@ -203,14 +235,20 @@ export default function Index() {
             ))}
           </div>
 
-          <div className="text-center mt-8 space-y-2">
+          <motion.div
+            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+            transition={{ delay: 1.2, duration: 0.6 }}
+            style={{ willChange: 'auto', zIndex: 1 }}
+            className="text-center mt-8 space-y-2"
+          >
             <div className="text-sm text-gray-500">
               Live insights from {totalInstances.toLocaleString()} font instances
             </div>
             <div className="text-xs text-gray-600">
               {totalFonts.toLocaleString()} unique fonts across {companies.length} enterprise datasets
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

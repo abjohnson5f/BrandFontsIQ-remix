@@ -6,6 +6,7 @@ import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
+import { useState, useEffect } from "react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
@@ -33,6 +34,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CompanyDashboard() {
   const { company, fontUsage, metrics } = useLoaderData<typeof loader>();
   const params = useParams();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Use stats from company data
   const uniqueFonts = company.stats.unique_fonts;
@@ -76,27 +82,51 @@ export default function CompanyDashboard() {
       <main className="container mx-auto px-4 py-8">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="glass rounded-xl p-6">
+          <motion.div
+            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            style={{ willChange: 'auto', zIndex: 1 }}
+            className="glass rounded-xl p-6"
+          >
             <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
             <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
-          </div>
+          </motion.div>
 
-          <div className="glass rounded-xl p-6">
+          <motion.div
+            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            style={{ willChange: 'auto', zIndex: 1 }}
+            className="glass rounded-xl p-6"
+          >
             <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
             <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
-          </div>
+          </motion.div>
 
-          <div className="glass rounded-xl p-6">
+          <motion.div
+            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            style={{ willChange: 'auto', zIndex: 1 }}
+            className="glass rounded-xl p-6"
+          >
             <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
             <div className="text-3xl font-bold text-white">{riskScore}%</div>
             <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Font Overview */}
-        <div className="glass rounded-xl p-6 mb-8">
+        <motion.div
+          initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+          animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          style={{ willChange: 'auto', zIndex: 1 }}
+          className="glass rounded-xl p-6 mb-8"
+        >
           <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
@@ -116,10 +146,15 @@ export default function CompanyDashboard() {
               <div className="text-sm text-gray-400">Enrichment Rate</div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Persona Views */}
-        <div>
+        <motion.div
+          initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+          animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          style={{ willChange: 'auto', zIndex: 1 }}
+        >
           <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {personas.map((persona, index) => (
@@ -129,7 +164,11 @@ export default function CompanyDashboard() {
                 className="block"
               >
                 <motion.div
+                  initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
+                  animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+                  transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
                   whileHover={{ scale: 1.02 }}
+                  style={{ willChange: 'auto', zIndex: 1 }}
                   className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all"
                 >
                   <persona.icon className="w-8 h-8 text-primary mb-3" />
@@ -139,7 +178,7 @@ export default function CompanyDashboard() {
               </Link>
             ))}
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
   );
