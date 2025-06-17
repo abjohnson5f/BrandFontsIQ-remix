@@ -1,12 +1,12 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
-import { motion } from "framer-motion";
+import { motion, LazyMotion, domAnimation } from "framer-motion";
 import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
-import { useState, useEffect } from "react";
+import { ClientOnly } from "~/components/ClientOnly";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
@@ -34,11 +34,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CompanyDashboard() {
   const { company, fontUsage, metrics } = useLoaderData<typeof loader>();
   const params = useParams();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   // Use stats from company data
   const uniqueFonts = company.stats.unique_fonts;
@@ -56,20 +51,6 @@ export default function CompanyDashboard() {
     { id: 'creative-design', name: 'Creative & Design', icon: FileText },
     { id: 'legal-technical', name: 'Legal & Technical', icon: Shield }
   ];
-
-  // Don't render animations on server
-  if (!isClient) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-4 py-32">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-6">Loading Dashboard...</h1>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,97 +77,186 @@ export default function CompanyDashboard() {
       <main className="container mx-auto px-4 py-8">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="glass rounded-xl p-6"
+          <ClientOnly
+            fallback={
+              <div className="glass rounded-xl p-6">
+                <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
+                <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
+                <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
+              </div>
+            }
           >
-            <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
-            <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
-            <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
-          </motion.div>
+            <LazyMotion features={domAnimation}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="glass rounded-xl p-6"
+              >
+                <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
+                <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
+                <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
+              </motion.div>
+            </LazyMotion>
+          </ClientOnly>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass rounded-xl p-6"
+          <ClientOnly
+            fallback={
+              <div className="glass rounded-xl p-6">
+                <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
+                <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
+                <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
+              </div>
+            }
           >
-            <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
-            <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
-            <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
-          </motion.div>
+            <LazyMotion features={domAnimation}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="glass rounded-xl p-6"
+              >
+                <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
+                <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
+                <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
+              </motion.div>
+            </LazyMotion>
+          </ClientOnly>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass rounded-xl p-6"
+          <ClientOnly
+            fallback={
+              <div className="glass rounded-xl p-6">
+                <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
+                <div className="text-3xl font-bold text-white">{riskScore}%</div>
+                <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
+              </div>
+            }
           >
-            <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
-            <div className="text-3xl font-bold text-white">{riskScore}%</div>
-            <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
-          </motion.div>
+            <LazyMotion features={domAnimation}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="glass rounded-xl p-6"
+              >
+                <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
+                <div className="text-3xl font-bold text-white">{riskScore}%</div>
+                <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
+              </motion.div>
+            </LazyMotion>
+          </ClientOnly>
         </div>
 
         {/* Font Overview */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="glass rounded-xl p-6 mb-8"
+        <ClientOnly
+          fallback={
+            <div className="glass rounded-xl p-6 mb-8">
+              <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <div className="text-2xl font-bold text-blue-400">{uniqueFonts}</div>
+                  <div className="text-sm text-gray-400">Unique Fonts</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-purple-400">{totalInstances}</div>
+                  <div className="text-sm text-gray-400">Total Instances</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-400">{company.stats.web_fonts}</div>
+                  <div className="text-sm text-gray-400">Web Fonts</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-orange-400">{enrichmentPercentage}%</div>
+                  <div className="text-sm text-gray-400">Enrichment Rate</div>
+                </div>
+              </div>
+            </div>
+          }
         >
-          <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <div className="text-2xl font-bold text-blue-400">{uniqueFonts}</div>
-              <div className="text-sm text-gray-400">Unique Fonts</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-400">{totalInstances}</div>
-              <div className="text-sm text-gray-400">Total Instances</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-green-400">{company.stats.web_fonts}</div>
-              <div className="text-sm text-gray-400">Web Fonts</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-orange-400">{enrichmentPercentage}%</div>
-              <div className="text-sm text-gray-400">Enrichment Rate</div>
-            </div>
-          </div>
-        </motion.div>
+          <LazyMotion features={domAnimation}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="glass rounded-xl p-6 mb-8"
+            >
+              <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <div className="text-2xl font-bold text-blue-400">{uniqueFonts}</div>
+                  <div className="text-sm text-gray-400">Unique Fonts</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-purple-400">{totalInstances}</div>
+                  <div className="text-sm text-gray-400">Total Instances</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-400">{company.stats.web_fonts}</div>
+                  <div className="text-sm text-gray-400">Web Fonts</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-orange-400">{enrichmentPercentage}%</div>
+                  <div className="text-sm text-gray-400">Enrichment Rate</div>
+                </div>
+              </div>
+            </motion.div>
+          </LazyMotion>
+        </ClientOnly>
 
         {/* Persona Views */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+        <ClientOnly
+          fallback={
+            <div>
+              <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {personas.map((persona) => (
+                  <Link
+                    key={persona.id}
+                    to={`/dashboard/${params.company}/${persona.id}`}
+                    className="block"
+                  >
+                    <div className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all">
+                      <persona.icon className="w-8 h-8 text-primary mb-3" />
+                      <h3 className="font-semibold text-white mb-2">{persona.name}</h3>
+                      <p className="text-sm text-gray-400">View tailored insights</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          }
         >
-          <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {personas.map((persona, index) => (
-              <Link
-                key={persona.id}
-                to={`/dashboard/${params.company}/${persona.id}`}
-                className="block"
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all"
-                >
-                  <persona.icon className="w-8 h-8 text-primary mb-3" />
-                  <h3 className="font-semibold text-white mb-2">{persona.name}</h3>
-                  <p className="text-sm text-gray-400">View tailored insights</p>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
+          <LazyMotion features={domAnimation}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {personas.map((persona, index) => (
+                  <Link
+                    key={persona.id}
+                    to={`/dashboard/${params.company}/${persona.id}`}
+                    className="block"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 + index * 0.1 }}
+                      whileHover={{ scale: 1.02 }}
+                      className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all"
+                    >
+                      <persona.icon className="w-8 h-8 text-primary mb-3" />
+                      <h3 className="font-semibold text-white mb-2">{persona.name}</h3>
+                      <p className="text-sm text-gray-400">View tailored insights</p>
+                    </motion.div>
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          </LazyMotion>
+        </ClientOnly>
       </main>
     </div>
   );
