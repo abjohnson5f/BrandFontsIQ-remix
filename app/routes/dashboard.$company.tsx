@@ -6,6 +6,7 @@ import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
+import { useState, useEffect } from "react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
@@ -33,6 +34,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CompanyDashboard() {
   const { company, fontUsage, metrics } = useLoaderData<typeof loader>();
   const params = useParams();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Use stats from company data
   const uniqueFonts = company.stats.unique_fonts;
@@ -50,6 +56,20 @@ export default function CompanyDashboard() {
     { id: 'creative-design', name: 'Creative & Design', icon: FileText },
     { id: 'legal-technical', name: 'Legal & Technical', icon: Shield }
   ];
+
+  // Don't render animations on server
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-32">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-6">Loading Dashboard...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

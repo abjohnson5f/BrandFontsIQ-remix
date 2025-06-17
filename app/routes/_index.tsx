@@ -22,10 +22,10 @@ export default function Index() {
   const { companies } = useLoaderData<typeof loader>();
   const [animatedCounts, setAnimatedCounts] = useState<number[]>(companies.map(() => 0));
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setIsClient(true);
   }, []);
 
   useEffect(() => {
@@ -53,6 +53,20 @@ export default function Index() {
 
   const totalFonts = companies.reduce((sum, c) => sum + c.stats.unique_fonts, 0);
   const totalInstances = companies.reduce((sum, c) => sum + c.stats.total_instances, 0);
+
+  // Don't render animations on server
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-32">
+          <div className="text-center">
+            <h1 className="text-5xl font-bold mb-6">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <LazyMotion features={domAnimation} strict>
@@ -102,7 +116,7 @@ export default function Index() {
                 <motion.span
                   className="text-foreground"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: mounted ? 1 : 0 }}
+                  animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
                   for Modern Enterprises
@@ -113,7 +127,7 @@ export default function Index() {
             <motion.p
               className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
               Transform your font data into actionable insights. Manage licensing, 
@@ -128,7 +142,7 @@ export default function Index() {
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="glass-card rounded-2xl p-8 text-center"
           >
             <h2 className="text-2xl font-bold mb-4">Get Started with Your Font Data</h2>
@@ -152,7 +166,7 @@ export default function Index() {
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold mb-4">
@@ -174,7 +188,7 @@ export default function Index() {
               >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
                   onHoverStart={() => setHoveredIndex(index)}
@@ -223,7 +237,7 @@ export default function Index() {
 
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: mounted ? 1 : 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
             className="text-center mt-8 space-y-2"
           >
