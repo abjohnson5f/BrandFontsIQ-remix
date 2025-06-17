@@ -186,39 +186,16 @@ export default function Index() {
                 className="block"
               >
                 <motion.div
-                  initial={isClient ? { scale: 0, rotateY: 180 } : {}}
-                  animate={isClient ? { scale: 1, rotateY: 0 } : {}}
-                  transition={{ 
-                    delay: 1 + index * 0.1,
-                    duration: 0.6,
-                    type: "spring",
-                    stiffness: 200
-                  }}
-                  whileHover={isClient ? { 
-                    scale: 1.05,
-                    rotateY: 5,
-                    transition: { duration: 0.2 }
-                  } : {}}
+                  whileHover={{ scale: 1.05 }}
                   onHoverStart={() => setHoveredIndex(index)}
                   onHoverEnd={() => setHoveredIndex(null)}
                   className="relative group cursor-pointer"
-                  style={{ 
-                    willChange: 'auto', 
-                    zIndex: 1,
-                    transformStyle: 'preserve-3d',
-                    perspective: '1000px'
-                  }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300" />
                   <div className="relative glass-card rounded-2xl p-6 text-center transition-all duration-300">
-                    <motion.div 
-                      className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 1.5 + index * 0.1, duration: 0.5, type: "spring" }}
-                    >
-                      {isClient ? animatedCounts[index]?.toLocaleString() || "0" : company.stats.total_instances.toLocaleString()}
-                    </motion.div>
+                    <div className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                      {company.stats.total_instances.toLocaleString()}
+                    </div>
                     <div className="text-sm text-gray-400 mb-2">font instances</div>
                     <div className="font-medium text-white">{company.display_name}</div>
                     <div className="text-xs text-gray-500 mt-1">{company.industry}</div>
