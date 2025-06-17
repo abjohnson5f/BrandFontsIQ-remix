@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { motion } from "framer-motion";
+import { motion, LazyMotion, domAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
@@ -22,6 +22,11 @@ export default function Index() {
   const { companies } = useLoaderData<typeof loader>();
   const [animatedCounts, setAnimatedCounts] = useState<number[]>(companies.map(() => 0));
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const intervals = companies.map((company, index) => {
@@ -50,6 +55,7 @@ export default function Index() {
   const totalInstances = companies.reduce((sum, c) => sum + c.stats.total_instances, 0);
 
   return (
+    <LazyMotion features={domAnimation} strict>
     <div className="min-h-screen bg-background">
       <Header />
       
@@ -87,11 +93,7 @@ export default function Index() {
 
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
+            <div>
               <h1 className="text-5xl md:text-6xl font-bold mb-6">
                 <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
                   Typography Intelligence
@@ -99,18 +101,18 @@ export default function Index() {
                 <br />
                 <motion.span
                   className="text-foreground"
-                  initial={{ opacity: 0 }}
+                  initial={{ opacity: mounted ? 1 : 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
                   for Modern Enterprises
                 </motion.span>
               </h1>
-            </motion.div>
+            </div>
 
             <motion.p
               className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
@@ -125,7 +127,7 @@ export default function Index() {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="glass-card rounded-2xl p-8 text-center"
@@ -150,7 +152,7 @@ export default function Index() {
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-12"
@@ -173,7 +175,7 @@ export default function Index() {
                 className="block"
               >
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
@@ -223,7 +225,7 @@ export default function Index() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: mounted ? 1 : 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
@@ -239,5 +241,6 @@ export default function Index() {
         </div>
       </section>
     </div>
+    </LazyMotion>
   );
 }
