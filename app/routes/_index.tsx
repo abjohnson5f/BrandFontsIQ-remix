@@ -20,6 +20,8 @@ export default function Index() {
   const { companies } = useLoaderData<typeof loader>();
   const [animatedCounts, setAnimatedCounts] = useState<number[]>(companies.map(() => 0));
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
+  console.log('Index component mounted, companies:', companies);
 
   useEffect(() => {
     const intervals = companies.map((company, index) => {
@@ -50,6 +52,11 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      {/* Debug: Simple visible test */}
+      <div style={{ background: 'red', color: 'white', padding: '20px', fontSize: '24px' }}>
+        DEBUG: This should be visible if rendering works
+      </div>
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
