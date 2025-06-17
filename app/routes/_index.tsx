@@ -50,21 +50,16 @@ export default function Index() {
   const totalInstances = companies.reduce((sum, c) => sum + c.stats.total_instances, 0);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
-      
-      {/* Debug: Simple visible test */}
-      <div style={{ background: 'red', color: 'white', padding: '20px', fontSize: '24px' }}>
-        DEBUG: This should be visible if rendering works
-      </div>
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         {/* Animated background gradient */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/5" />
           <motion.div
-            className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl"
+            className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.5, 0.3],
@@ -76,7 +71,7 @@ export default function Index() {
             }}
           />
           <motion.div
-            className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl"
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.5, 0.3],
@@ -103,7 +98,7 @@ export default function Index() {
                 </span>
                 <br />
                 <motion.span
-                  className="text-foreground"
+                  className="text-white"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -114,7 +109,7 @@ export default function Index() {
             </motion.div>
 
             <motion.p
-              className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+              className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
