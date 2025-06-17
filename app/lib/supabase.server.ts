@@ -1,11 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Server-side Supabase client
-const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const supabaseUrl = process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key';
 
 // Don't throw on missing env vars during development
-if (!supabaseUrl || !supabaseServiceKey) {
+if (supabaseUrl === 'https://placeholder.supabase.co') {
   console.warn('Missing Supabase environment variables');
 }
 
