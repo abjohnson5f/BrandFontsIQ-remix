@@ -1,57 +1,47 @@
-import { Header } from "~/components/header";
-
 export default function Index() {
   return (
     <div>
-      <Header />
+      <div style={{ 
+        backgroundColor: '#1a1a1a', 
+        color: 'white', 
+        padding: '20px',
+        borderBottom: '1px solid #333'
+      }}>
+        <h1 style={{ margin: 0, fontSize: '24px' }}>BrandFontsIQ</h1>
+      </div>
       
-      <div style={{ padding: '50px' }}>
+      <div style={{ padding: '50px', backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
         <h1 style={{ color: 'white', fontSize: '48px', marginBottom: '20px' }}>
-          Typography Intelligence for Modern Enterprises
+          Can you see this text?
         </h1>
         
-        <p style={{ color: '#999', fontSize: '20px', marginBottom: '40px' }}>
-          Transform your font data into actionable insights.
-        </p>
+        <div style={{ 
+          backgroundColor: 'red', 
+          color: 'white', 
+          padding: '20px',
+          fontSize: '24px',
+          marginBottom: '20px'
+        }}>
+          RED BOX - This should be visible
+        </div>
         
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(3, 1fr)', 
-          gap: '20px',
-          marginTop: '60px' 
+          backgroundColor: 'blue', 
+          color: 'white', 
+          padding: '20px',
+          fontSize: '24px',
+          marginBottom: '20px'
         }}>
-          <div style={{ 
-            background: 'rgba(255,255,255,0.1)', 
-            padding: '30px', 
-            borderRadius: '10px',
-            border: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <h2 style={{ color: 'white', fontSize: '24px' }}>Hormel Foods</h2>
-            <p style={{ color: '#999', fontSize: '36px', fontWeight: 'bold' }}>263</p>
-            <p style={{ color: '#666' }}>font instances</p>
-          </div>
-          
-          <div style={{ 
-            background: 'rgba(255,255,255,0.1)', 
-            padding: '30px', 
-            borderRadius: '10px',
-            border: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <h2 style={{ color: 'white', fontSize: '24px' }}>Polaris</h2>
-            <p style={{ color: '#999', fontSize: '36px', fontWeight: 'bold' }}>2,134</p>
-            <p style={{ color: '#666' }}>font instances</p>
-          </div>
-          
-          <div style={{ 
-            background: 'rgba(255,255,255,0.1)', 
-            padding: '30px', 
-            borderRadius: '10px',
-            border: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <h2 style={{ color: 'white', fontSize: '24px' }}>RPM International</h2>
-            <p style={{ color: '#999', fontSize: '36px', fontWeight: 'bold' }}>588</p>
-            <p style={{ color: '#666' }}>font instances</p>
-          </div>
+          BLUE BOX - This should be visible
+        </div>
+        
+        <div style={{ 
+          backgroundColor: 'white', 
+          color: 'black', 
+          padding: '20px',
+          fontSize: '24px'
+        }}>
+          WHITE BOX - Black text on white background
         </div>
       </div>
     </div>
