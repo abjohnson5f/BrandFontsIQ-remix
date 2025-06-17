@@ -101,8 +101,8 @@ export default function Index() {
                 <br />
                 <motion.span
                   className="text-foreground"
-                  initial={{ opacity: mounted ? 1 : 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: mounted ? 1 : 0 }}
                   transition={{ delay: 0.3 }}
                 >
                   for Modern Enterprises
@@ -112,8 +112,8 @@ export default function Index() {
 
             <motion.p
               className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
-              initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
               transition={{ delay: 0.4 }}
             >
               Transform your font data into actionable insights. Manage licensing, 
@@ -127,9 +127,8 @@ export default function Index() {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <motion.div
-            initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
             className="glass-card rounded-2xl p-8 text-center"
           >
             <h2 className="text-2xl font-bold mb-4">Get Started with Your Font Data</h2>
@@ -152,9 +151,8 @@ export default function Index() {
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold mb-4">
@@ -175,9 +173,8 @@ export default function Index() {
                 className="block"
               >
                 <motion.div
-                  initial={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 20 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
                   onHoverStart={() => setHoveredIndex(index)}
@@ -225,9 +222,8 @@ export default function Index() {
           </div>
 
           <motion.div
-            initial={{ opacity: mounted ? 1 : 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: mounted ? 1 : 0 }}
             transition={{ delay: 0.5 }}
             className="text-center mt-8 space-y-2"
           >
