@@ -30,26 +30,31 @@ export default function Index() {
   useEffect(() => {
     if (!isClient) return;
     
-    const intervals = companies.map((company, index) => {
-      const targetCount = company.stats.total_instances;
-      const increment = Math.ceil(targetCount / 50);
-      let current = 0;
+    // Delay the count animation slightly so it's more noticeable
+    const timeout = setTimeout(() => {
+      const intervals = companies.map((company, index) => {
+        const targetCount = company.stats.total_instances;
+        const increment = Math.ceil(targetCount / 50);
+        let current = 0;
 
-      return setInterval(() => {
-        current = Math.min(current + increment, targetCount);
-        setAnimatedCounts(prev => {
-          const newCounts = [...prev];
-          newCounts[index] = current;
-          return newCounts;
-        });
+        return setInterval(() => {
+          current = Math.min(current + increment, targetCount);
+          setAnimatedCounts(prev => {
+            const newCounts = [...prev];
+            newCounts[index] = current;
+            return newCounts;
+          });
 
-        if (current >= targetCount) {
-          clearInterval(intervals[index]);
-        }
-      }, 30);
-    });
+          if (current >= targetCount) {
+            clearInterval(intervals[index]);
+          }
+        }, 30);
+      });
 
-    return () => intervals.forEach(clearInterval);
+      return () => intervals.forEach(clearInterval);
+    }, 1000); // Wait 1 second before starting count animation
+
+    return () => clearTimeout(timeout);
   }, [companies, isClient]);
 
   const totalFonts = companies.reduce((sum, c) => sum + c.stats.unique_fonts, 0);
@@ -104,10 +109,10 @@ export default function Index() {
               <br />
               <motion.span
                 className="text-foreground"
-                initial={isClient ? { scale: 0.95, filter: 'brightness(0.7)' } : {}}
-                animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                style={{ willChange: 'auto', zIndex: 1 }}
+                initial={isClient ? { scale: 0.8, filter: 'blur(10px)' } : {}}
+                animate={isClient ? { scale: 1, filter: 'blur(0px)' } : {}}
+                transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+                style={{ willChange: 'auto', zIndex: 1, display: 'inline-block' }}
               >
                 for Modern Enterprises
               </motion.span>
@@ -115,9 +120,9 @@ export default function Index() {
 
             <motion.p
               className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
-              initial={isClient ? { scale: 0.95, y: 20, filter: 'brightness(0.7)' } : {}}
-              animate={isClient ? { scale: 1, y: 0, filter: 'brightness(1)' } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              initial={isClient ? { scale: 0.8, y: 40, filter: 'blur(10px)' } : {}}
+              animate={isClient ? { scale: 1, y: 0, filter: 'blur(0px)' } : {}}
+              transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
               style={{ willChange: 'auto', zIndex: 1 }}
             >
               Transform your font data into actionable insights. Manage licensing, 
@@ -131,9 +136,9 @@ export default function Index() {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <motion.div
-            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            initial={isClient ? { scale: 0.8, y: 40, filter: 'blur(10px)' } : {}}
+            animate={isClient ? { scale: 1, y: 0, filter: 'blur(0px)' } : {}}
+            transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
             style={{ willChange: 'auto', zIndex: 1 }}
             className="glass-card rounded-2xl p-8 text-center"
           >
@@ -142,7 +147,7 @@ export default function Index() {
               Upload your font inventory data to create a personalized typography intelligence dashboard 
               and unlock insights specific to your organization.
             </p>
-            <Button size="lg" className="transform hover:scale-105 btn-glow">
+            <Button size="lg" className="transform hover:scale-105 btn-glow transition-transform duration-200">
               <Upload className="w-5 h-5" />
               <span>Upload Data & Create Dashboard</span>
             </Button>
@@ -157,9 +162,9 @@ export default function Index() {
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-            transition={{ delay: 0.6, duration: 0.6 }}
+            initial={isClient ? { scale: 0.8, filter: 'blur(10px)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'blur(0px)' } : {}}
+            transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
             style={{ willChange: 'auto', zIndex: 1 }}
             className="text-center mb-12"
           >
@@ -181,23 +186,39 @@ export default function Index() {
                 className="block"
               >
                 <motion.div
-                  initial={isClient ? { scale: 0.9, filter: 'brightness(0.8)' } : {}}
-                  animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
+                  initial={isClient ? { scale: 0, rotateY: 180 } : {}}
+                  animate={isClient ? { scale: 1, rotateY: 0 } : {}}
                   transition={{ 
-                    delay: 0.7 + index * 0.05,
-                    duration: 0.5
+                    delay: 1 + index * 0.1,
+                    duration: 0.6,
+                    type: "spring",
+                    stiffness: 200
                   }}
-                  whileHover={isClient ? { scale: 1.05 } : {}}
+                  whileHover={isClient ? { 
+                    scale: 1.05,
+                    rotateY: 5,
+                    transition: { duration: 0.2 }
+                  } : {}}
                   onHoverStart={() => setHoveredIndex(index)}
                   onHoverEnd={() => setHoveredIndex(null)}
                   className="relative group cursor-pointer"
-                  style={{ willChange: 'auto', zIndex: 1 }}
+                  style={{ 
+                    willChange: 'auto', 
+                    zIndex: 1,
+                    transformStyle: 'preserve-3d',
+                    perspective: '1000px'
+                  }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300" />
                   <div className="relative glass-card rounded-2xl p-6 text-center transition-all duration-300">
-                    <div className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                    <motion.div 
+                      className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 1.5 + index * 0.1, duration: 0.5, type: "spring" }}
+                    >
                       {isClient ? animatedCounts[index]?.toLocaleString() || "0" : company.stats.total_instances.toLocaleString()}
-                    </div>
+                    </motion.div>
                     <div className="text-sm text-gray-400 mb-2">font instances</div>
                     <div className="font-medium text-white">{company.display_name}</div>
                     <div className="text-xs text-gray-500 mt-1">{company.industry}</div>
@@ -206,9 +227,10 @@ export default function Index() {
                     <AnimatePresence>
                       {hoveredIndex === index && isClient && (
                         <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
+                          initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.8 }}
+                          transition={{ duration: 0.2 }}
                           className="absolute left-1/2 -translate-x-1/2 -bottom-20 bg-gray-900 border border-gray-700 rounded-lg p-3 z-10 whitespace-nowrap"
                           style={{ willChange: 'auto' }}
                         >
@@ -223,11 +245,16 @@ export default function Index() {
                     
                     {/* Mini trend indicator */}
                     <div className="mt-3 flex items-center justify-center gap-1">
-                      <div className="w-1 h-3 bg-blue-500/30 rounded-full" />
-                      <div className="w-1 h-4 bg-blue-500/50 rounded-full" />
-                      <div className="w-1 h-6 bg-blue-500/70 rounded-full" />
-                      <div className="w-1 h-5 bg-purple-500/70 rounded-full" />
-                      <div className="w-1 h-7 bg-purple-500 rounded-full animate-pulse" />
+                      {[3, 4, 6, 5, 7].map((height, i) => (
+                        <motion.div
+                          key={i}
+                          className={`w-1 rounded-full ${i === 4 ? 'bg-purple-500' : 'bg-blue-500/70'}`}
+                          initial={{ height: 0 }}
+                          animate={{ height: height * 4 }}
+                          transition={{ delay: 2 + index * 0.1 + i * 0.1, duration: 0.5 }}
+                          style={{ originY: 1 }}
+                        />
+                      ))}
                     </div>
                   </div>
                 </motion.div>
@@ -236,9 +263,9 @@ export default function Index() {
           </div>
 
           <motion.div
-            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-            transition={{ delay: 1.2, duration: 0.6 }}
+            initial={isClient ? { scale: 0.8, filter: 'blur(10px)' } : {}}
+            animate={isClient ? { scale: 1, filter: 'blur(0px)' } : {}}
+            transition={{ delay: 2.5, duration: 0.8, ease: "easeOut" }}
             style={{ willChange: 'auto', zIndex: 1 }}
             className="text-center mt-8 space-y-2"
           >
