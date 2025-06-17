@@ -9,6 +9,7 @@ import { Header } from "~/components/header";
 import { Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { FeaturesGrid } from "~/components/features-grid";
+import { CompanyCard } from "~/components/company-card";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // TODO: Replace with real Supabase data once gateway functions are accessible
@@ -182,64 +183,16 @@ export default function Index() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {companies.map((company, index) => (
-              <Link
+              <CompanyCard
                 key={company.schema_name}
-                to={`/dashboard/${company.schema_name}`}
-                className="block"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  onHoverStart={() => setHoveredIndex(index)}
-                  onHoverEnd={() => setHoveredIndex(null)}
-                  className="relative group cursor-pointer"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300" />
-                  <div className="relative glass-card rounded-2xl p-6 text-center transition-all duration-300">
-                    <div className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                      {company.stats.total_instances.toLocaleString()}
-                    </div>
-                    <div className="text-sm text-gray-400 mb-2">font instances</div>
-                    <div className="font-medium text-white">{company.display_name}</div>
-                    <div className="text-xs text-gray-500 mt-1">{company.industry}</div>
-                    
-                    {/* Hover stats */}
-                    <AnimatePresence>
-                      {hoveredIndex === index && isClient && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 10, scale: 0.8 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute left-1/2 -translate-x-1/2 -bottom-20 bg-gray-900 border border-gray-700 rounded-lg p-3 z-10 whitespace-nowrap"
-                          style={{ willChange: 'auto' }}
-                        >
-                          <div className="text-xs text-gray-400">
-                            <div>Unique fonts: {company.stats.unique_fonts.toLocaleString()}</div>
-                            <div>Total instances: {company.stats.total_instances.toLocaleString()}</div>
-                            <div>Enriched: {company.stats.enrichment_percentage}%</div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    
-                    {/* Mini trend indicator */}
-                    <div className="mt-3 flex items-center justify-center gap-1">
-                      {[3, 4, 6, 5, 7].map((height, i) => (
-                        <motion.div
-                          key={i}
-                          className={`w-1 rounded-full ${i === 4 ? 'bg-purple-500' : 'bg-blue-500/70'}`}
-                          initial={{ height: 0 }}
-                          animate={{ height: height * 4 }}
-                          transition={{ delay: 2 + index * 0.1 + i * 0.1, duration: 0.5 }}
-                          style={{ originY: 1 }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
+                company={company}
+                index={index}
+                isHovered={hoveredIndex === index}
+                onHoverStart={() => setHoveredIndex(index)}
+                onHoverEnd={() => setHoveredIndex(null)}
+              />
             ))}
           </div>
 
