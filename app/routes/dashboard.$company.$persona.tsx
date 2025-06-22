@@ -3,7 +3,26 @@ import { json } from "@remix-run/node";
 import { useLoaderData, useParams, Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, ArrowUpIcon, ArrowDownIcon, InfoIcon, TrendingUp } from "lucide-react";
+import { 
+  ArrowLeft, 
+  Clock, 
+  ArrowUpIcon, 
+  ArrowDownIcon, 
+  InfoIcon, 
+  TrendingUp,
+  DollarSign,
+  Zap,
+  Shield,
+  BarChart3,
+  Activity,
+  Target,
+  AlertTriangle,
+  CheckCircle,
+  CircleDollarSign,
+  Gauge,
+  FileText,
+  Download
+} from "lucide-react";
 
 // Import our executive dashboard components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
@@ -58,7 +77,7 @@ const MOCK_DATA = {
   }
 };
 
-// Metric Card Component
+// Enhanced Metric Card Component with glass morphism
 const MetricCard = ({ 
   title, 
   value, 
@@ -67,252 +86,317 @@ const MetricCard = ({
   subtitle, 
   trend = "up",
   emphasis = false,
-  breakdown
+  icon: Icon,
+  color = "primary"
 }: any) => {
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
-  const trendColor = trend === "up" ? "text-green-500" : "text-red-500";
+  const trendColor = trend === "up" ? "text-emerald-400" : "text-red-400";
+  const bgTrendColor = trend === "up" ? "bg-emerald-500/10" : "bg-red-500/10";
+  
+  const colorClasses = {
+    primary: "from-blue-500/20 to-purple-500/20 border-blue-500/20",
+    success: "from-emerald-500/20 to-green-500/20 border-emerald-500/20",
+    warning: "from-amber-500/20 to-orange-500/20 border-amber-500/20",
+    danger: "from-red-500/20 to-pink-500/20 border-red-500/20"
+  };
   
   return (
-    <Card className={`relative overflow-hidden ${emphasis ? 'ring-2 ring-primary shadow-lg' : ''}`}>
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            {title}
-          </CardTitle>
-          <InfoIcon className="h-4 w-4 text-muted-foreground/50 cursor-help" />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          <div className="flex items-baseline justify-between">
-            <span className={`${emphasis ? 'text-4xl' : 'text-3xl'} font-bold`}>
-              {format === 'currency' ? `$${(value / 1000000000).toFixed(3)}B` : 
-               format === 'multiple' ? `${value.toFixed(1)}x` :
-               format === 'percentage' ? `${value}%` : value}
-            </span>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={`relative ${emphasis ? 'md:col-span-2' : ''}`}
+    >
+      <div className={`glass relative overflow-hidden rounded-xl border ${colorClasses[color]} bg-gradient-to-br ${emphasis ? 'p-8' : 'p-6'}`}>
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
+        <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br ${colorClasses[color]} blur-3xl opacity-20`} />
+        
+        <div className="relative">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              {Icon && (
+                <div className={`p-2 rounded-lg bg-gradient-to-br ${colorClasses[color]}`}>
+                  <Icon className="h-5 w-5 text-white" />
+                </div>
+              )}
+              <div>
+                <p className="text-sm text-gray-400 font-medium">{title}</p>
+                {subtitle && (
+                  <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
+                )}
+              </div>
+            </div>
+            <InfoIcon className="h-4 w-4 text-gray-500 cursor-help hover:text-gray-400 transition-colors" />
+          </div>
+          
+          <div className="flex items-end justify-between">
+            <div>
+              <p className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
+                {format === 'currency' ? `$${(value / 1000000000).toFixed(2)}B` : 
+                 format === 'multiple' ? `${value.toLocaleString()}x` :
+                 format === 'percentage' ? `${value}%` : value.toLocaleString()}
+              </p>
+            </div>
+            
             {improvement && (
-              <div className={`flex items-center gap-1 ${trendColor}`}>
-                <TrendIcon className="h-4 w-4" />
-                <span className="text-sm font-semibold">+{improvement}%</span>
+              <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${bgTrendColor}`}>
+                <TrendIcon className={`h-4 w-4 ${trendColor}`} />
+                <span className={`text-sm font-semibold ${trendColor}`}>
+                  {trend === "up" ? "+" : ""}{improvement}%
+                </span>
               </div>
             )}
           </div>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground">{subtitle}</p>
-          )}
-          {breakdown && (
-            <div className="mt-3 space-y-1">
-              {Object.entries(breakdown).map(([key, value]: [string, any]) => (
-                <div key={key} className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground capitalize">{key}:</span>
-                  <span className="font-medium">${(value / 1000000000).toFixed(2)}B</span>
-                </div>
-              ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Value Stream Card Component
+const ValueStreamCard = ({ 
+  title, 
+  value, 
+  metrics, 
+  icon: Icon, 
+  color 
+}: any) => {
+  const colorClasses = {
+    green: "from-emerald-500/20 to-green-500/20 border-emerald-500/20",
+    blue: "from-blue-500/20 to-cyan-500/20 border-blue-500/20",
+    purple: "from-purple-500/20 to-pink-500/20 border-purple-500/20"
+  };
+  
+  const iconColors = {
+    green: "text-emerald-400",
+    blue: "text-blue-400",
+    purple: "text-purple-400"
+  };
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="h-full"
+    >
+      <div className={`glass rounded-xl border ${colorClasses[color]} bg-gradient-to-br p-6 h-full`}>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className={`p-2 rounded-lg bg-gradient-to-br ${colorClasses[color]}`}>
+              <Icon className={`h-5 w-5 ${iconColors[color]}`} />
             </div>
-          )}
+            <h3 className="font-semibold text-white">{title}</h3>
+          </div>
+          <p className="text-2xl font-bold text-white">{value}</p>
         </div>
-      </CardContent>
-      {emphasis && (
-        <div className="absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8">
-          <div className="absolute inset-0 bg-primary/5 rounded-full blur-2xl" />
+        
+        <div className="space-y-4">
+          {metrics.map((metric: any, index: number) => (
+            <div key={index}>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-400">{metric.name}</span>
+                <span className={`text-sm font-medium ${
+                  metric.status === 'positive' ? 'text-emerald-400' : 
+                  metric.status === 'neutral' ? 'text-gray-300' : 'text-red-400'
+                }`}>
+                  {metric.value}
+                </span>
+              </div>
+              <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${metric.progress}%` }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className={`h-full rounded-full bg-gradient-to-r ${
+                    color === 'green' ? 'from-emerald-500 to-green-400' :
+                    color === 'blue' ? 'from-blue-500 to-cyan-400' :
+                    'from-purple-500 to-pink-400'
+                  }`}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      )}
-    </Card>
+      </div>
+    </motion.div>
   );
 };
 
 // Executive Dashboard Component
 function ExecutiveDashboard({ company }: { company: any }) {
   return (
-    <div className="p-6 space-y-6">
-      {/* Header Section */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Executive Typography Analysis</h1>
-          <p className="text-muted-foreground mt-1">
-            Strategic value creation through typography optimization
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="px-4 py-2 text-sm border rounded-lg hover:bg-accent">
-            Export Executive Report
-          </button>
-          <button className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary/90">
-            View Recommendations
-          </button>
-        </div>
-      </div>
-
-      {/* Key Metrics Grid - 3 primary metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard
-          title="Total Value Created"
-          value={MOCK_DATA.totalValueCreated.value}
-          format="currency"
-          improvement={MOCK_DATA.totalValueCreated.improvement}
-          subtitle="Annual impact across all value streams"
-          emphasis={true}
-          breakdown={MOCK_DATA.totalValueCreated.breakdown}
-        />
-        
-        <MetricCard
-          title="Typography ROI"
-          value={MOCK_DATA.roi.value}
-          format="multiple"
-          improvement={null}
-          subtitle={`${MOCK_DATA.roi.paybackMonths} month payback period`}
-        />
-        
-        <MetricCard
-          title="Brand Strength Uplift"
-          value={MOCK_DATA.brandStrength.improvement}
-          format="percentage"
-          improvement={null}
-          subtitle={`From ${MOCK_DATA.brandStrength.current}% to ${MOCK_DATA.brandStrength.potential}%`}
-        />
-      </div>
-
-      {/* Value Creation Breakdown */}
-      <Card>
-        <CardHeader>
+    <div className="min-h-screen bg-background">
+      {/* Gradient background effect */}
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5" />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
+      
+      <div className="relative z-10 p-8">
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Value Creation Analysis</CardTitle>
-              <CardDescription>
-                How typography optimization drives business value
-              </CardDescription>
+              <h1 className="text-4xl font-bold text-white mb-2">Executive Typography Analysis</h1>
+              <p className="text-gray-400 text-lg">
+                Strategic value creation through typography optimization for {company.name}
+              </p>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>Confidence Level:</span>
-              <div className="flex items-center gap-1">
-                <Progress value={85} className="w-20 h-2" />
-                <span className="font-medium">85%</span>
-              </div>
+            <div className="flex items-center gap-4">
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="glass px-6 py-3 rounded-lg border border-gray-700 hover:border-gray-600 transition-all flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                <span className="text-sm font-medium">Export Report</span>
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center gap-2"
+              >
+                <Target className="h-4 w-4" />
+                <span className="text-sm">View Actions</span>
+              </motion.button>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
+        </motion.div>
+
+        {/* Key Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <MetricCard
+            title="Total Value Created"
+            value={MOCK_DATA.totalValueCreated.value}
+            format="currency"
+            improvement={MOCK_DATA.totalValueCreated.improvement}
+            subtitle="Annual recurring impact"
+            emphasis={true}
+            icon={CircleDollarSign}
+            color="success"
+          />
+          
+          <MetricCard
+            title="Typography ROI"
+            value={MOCK_DATA.roi.value}
+            format="multiple"
+            subtitle={`${MOCK_DATA.roi.paybackMonths} month payback`}
+            icon={TrendingUp}
+            color="primary"
+          />
+          
+          <MetricCard
+            title="Brand Strength"
+            value={MOCK_DATA.brandStrength.improvement}
+            format="percentage"
+            improvement={null}
+            subtitle="Potential uplift"
+            icon={Gauge}
+            color="warning"
+          />
+        </div>
+
+        {/* Value Streams Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white">Value Creation Breakdown</h2>
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <Activity className="h-4 w-4" />
+              <span>Real-time analysis</span>
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Economic Value */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full" />
-                  Economic Value
-                </h3>
-                <span className="text-2xl font-bold">$6.96B</span>
-              </div>
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Customer Lifetime Value</span>
-                    <span className="font-medium">+18%</span>
-                  </div>
-                  <Progress value={75} className="h-2" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Conversion Rate</span>
-                    <span className="font-medium">+3.2%</span>
-                  </div>
-                  <Progress value={45} className="h-2" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Brand Premium</span>
-                    <span className="font-medium">+12%</span>
-                  </div>
-                  <Progress value={60} className="h-2" />
-                </div>
-              </div>
-            </div>
-
-            {/* Efficiency Value */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                  Efficiency Value
-                </h3>
-                <span className="text-2xl font-bold">$582M</span>
-              </div>
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Page Load Performance</span>
-                    <span className="font-medium">+42%</span>
-                  </div>
-                  <Progress value={85} className="h-2" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Mobile Optimization</span>
-                    <span className="font-medium">+28%</span>
-                  </div>
-                  <Progress value={70} className="h-2" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Bandwidth Savings</span>
-                    <span className="font-medium">-35%</span>
-                  </div>
-                  <Progress value={55} className="h-2" />
-                </div>
-              </div>
-            </div>
-
-            {/* Risk Value */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <div className="w-3 h-3 bg-purple-500 rounded-full" />
-                  Risk Mitigation
-                </h3>
-                <span className="text-2xl font-bold">$300M</span>
-              </div>
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>License Compliance</span>
-                    <span className="font-medium text-green-600">Protected</span>
-                  </div>
-                  <Progress value={100} className="h-2" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>WCAG Compliance</span>
-                    <span className="font-medium">+95%</span>
-                  </div>
-                  <Progress value={95} className="h-2" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Brand Consistency</span>
-                    <span className="font-medium">+88%</span>
-                  </div>
-                  <Progress value={88} className="h-2" />
-                </div>
-              </div>
-            </div>
+            <ValueStreamCard
+              title="Economic Value"
+              value="$6.96B"
+              icon={DollarSign}
+              color="green"
+              metrics={[
+                { name: "Customer Lifetime Value", value: "+18%", progress: 75, status: "positive" },
+                { name: "Conversion Rate", value: "+3.2%", progress: 45, status: "positive" },
+                { name: "Brand Premium", value: "+12%", progress: 60, status: "positive" },
+                { name: "Market Share Growth", value: "+8.5%", progress: 52, status: "positive" }
+              ]}
+            />
+            
+            <ValueStreamCard
+              title="Efficiency Value"
+              value="$582M"
+              icon={Zap}
+              color="blue"
+              metrics={[
+                { name: "Page Load Performance", value: "+42%", progress: 85, status: "positive" },
+                { name: "Mobile Optimization", value: "+28%", progress: 70, status: "positive" },
+                { name: "Bandwidth Reduction", value: "-35%", progress: 55, status: "positive" },
+                { name: "Core Web Vitals", value: "+65%", progress: 78, status: "positive" }
+              ]}
+            />
+            
+            <ValueStreamCard
+              title="Risk Mitigation"
+              value="$300M"
+              icon={Shield}
+              color="purple"
+              metrics={[
+                { name: "License Compliance", value: "100%", progress: 100, status: "positive" },
+                { name: "WCAG Compliance", value: "AA+", progress: 95, status: "positive" },
+                { name: "Brand Consistency", value: "88%", progress: 88, status: "neutral" },
+                { name: "Legal Exposure", value: "Low", progress: 92, status: "positive" }
+              ]}
+            />
           </div>
+        </motion.div>
 
-          {/* Investment Overview */}
-          <div className="mt-6 pt-6 border-t">
-            <div className="flex items-center justify-between">
+        {/* Investment Summary */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="glass rounded-xl p-8 bg-gradient-to-br from-gray-900/50 to-gray-800/50 border border-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
-                <p className="text-sm text-muted-foreground">Total Investment Required</p>
-                <p className="text-2xl font-bold">$720K</p>
-                <p className="text-xs text-muted-foreground mt-1">Implementation + Annual Licensing</p>
+                <p className="text-sm text-gray-400 mb-2">Total Investment Required</p>
+                <p className="text-3xl font-bold text-white">$720K</p>
+                <p className="text-sm text-gray-500 mt-1">One-time + Annual</p>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">Net Value Creation</p>
-                <p className="text-2xl font-bold text-green-600">$7.841B</p>
-                <p className="text-xs text-muted-foreground mt-1">First year impact</p>
+              <div>
+                <p className="text-sm text-gray-400 mb-2">Implementation Timeline</p>
+                <p className="text-3xl font-bold text-white">12-16</p>
+                <p className="text-sm text-gray-500 mt-1">Weeks to full value</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400 mb-2">Net Annual Value</p>
+                <p className="text-3xl font-bold text-emerald-400">$7.841B</p>
+                <p className="text-sm text-gray-500 mt-1">After all costs</p>
               </div>
             </div>
+            
+            <div className="mt-6 pt-6 border-t border-gray-700 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <CheckCircle className="h-5 w-5 text-emerald-400" />
+                <span className="text-sm text-gray-300">Analysis confidence: 85% based on 263 font instances</span>
+              </div>
+              <Link 
+                to="#" 
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                View calculation methodology →
+              </Link>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </motion.div>
+      </div>
     </div>
   );
 }
