@@ -83,7 +83,8 @@ const MetricCard = ({
   trend = "up",
   emphasis = false,
   icon: Icon,
-  color = "primary"
+  color = "primary",
+  delay = 0
 }: any) => {
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
   const trendColor = trend === "up" ? "text-emerald-400" : "text-red-400";
@@ -97,8 +98,8 @@ const MetricCard = ({
   };
   
   return (
-    <div className={`relative ${emphasis ? 'md:col-span-2' : ''}`}>
-      <div className={`glass relative overflow-hidden rounded-xl border ${colorClasses[color]} bg-gradient-to-br ${emphasis ? 'p-8' : 'p-6'}`}>
+    <div className={`relative ${emphasis ? 'md:col-span-2' : ''} animate-fade-up`} style={{ animationDelay: `${delay}ms` }}>
+      <div className={`glass relative overflow-hidden rounded-xl border ${colorClasses[color]} bg-gradient-to-br ${emphasis ? 'p-8' : 'p-6'} transition-all duration-300 hover:scale-[1.02] hover:shadow-lg`}>
         {/* Background decoration */}
         <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
         <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br ${colorClasses[color]} blur-3xl opacity-20`} />
@@ -151,7 +152,8 @@ const ValueStreamCard = ({
   value, 
   metrics, 
   icon: Icon, 
-  color 
+  color,
+  delay = 0 
 }: any) => {
   const colorClasses = {
     green: "from-emerald-500/20 to-green-500/20 border-emerald-500/20",
@@ -166,8 +168,8 @@ const ValueStreamCard = ({
   };
   
   return (
-    <div className="h-full">
-      <div className={`glass rounded-xl border ${colorClasses[color]} bg-gradient-to-br p-6 h-full`}>
+    <div className="h-full animate-scale-in" style={{ animationDelay: `${delay}ms` }}>
+      <div className={`glass rounded-xl border ${colorClasses[color]} bg-gradient-to-br p-6 h-full transition-all duration-300 hover:shadow-xl`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-lg bg-gradient-to-br ${colorClasses[color]}`}>
@@ -216,7 +218,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
       <div className="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5" />
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
       
-      <div className="relative z-10 p-8">
+      <div className="relative z-10 p-8 animate-fade-in">
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -250,6 +252,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
             emphasis={true}
             icon={CircleDollarSign}
             color="success"
+            delay={100}
           />
           
           <MetricCard
@@ -259,6 +262,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
             subtitle={`${MOCK_DATA.roi.paybackMonths} month payback`}
             icon={TrendingUp}
             color="primary"
+            delay={200}
           />
           
           <MetricCard
@@ -269,6 +273,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
             subtitle="Potential uplift"
             icon={Gauge}
             color="warning"
+            delay={300}
           />
         </div>
 
@@ -288,6 +293,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
               value="$6.96B"
               icon={DollarSign}
               color="green"
+              delay={400}
               metrics={[
                 { name: "Customer Lifetime Value", value: "+18%", progress: 75, status: "positive" },
                 { name: "Conversion Rate", value: "+3.2%", progress: 45, status: "positive" },
@@ -301,6 +307,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
               value="$582M"
               icon={Zap}
               color="blue"
+              delay={500}
               metrics={[
                 { name: "Page Load Performance", value: "+42%", progress: 85, status: "positive" },
                 { name: "Mobile Optimization", value: "+28%", progress: 70, status: "positive" },
@@ -314,6 +321,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
               value="$300M"
               icon={Shield}
               color="purple"
+              delay={600}
               metrics={[
                 { name: "License Compliance", value: "100%", progress: 100, status: "positive" },
                 { name: "WCAG Compliance", value: "AA+", progress: 95, status: "positive" },
@@ -325,8 +333,8 @@ function ExecutiveDashboard({ company }: { company: any }) {
         </div>
 
         {/* Investment Summary */}
-        <div>
-          <div className="glass rounded-xl p-8 bg-gradient-to-br from-gray-900/50 to-gray-800/50 border border-gray-700">
+        <div className="animate-fade-in" style={{ animationDelay: '700ms' }}>
+          <div className="glass rounded-xl p-8 bg-gradient-to-br from-gray-900/50 to-gray-800/50 border border-gray-700 transition-all duration-300 hover:border-gray-600">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <p className="text-sm text-gray-400 mb-2">Total Investment Required</p>

@@ -1,12 +1,10 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useParams, Outlet } from "@remix-run/react";
-import { motion } from "framer-motion";
 import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
-import { useState, useEffect } from "react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
@@ -34,11 +32,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CompanyDashboard() {
   const { company, fontUsage, metrics } = useLoaderData<typeof loader>();
   const params = useParams();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
   
   // Check if we're on a persona route
   const isPersonaRoute = params.persona !== undefined;
@@ -90,50 +83,38 @@ export default function CompanyDashboard() {
           <main className="container mx-auto px-4 py-8">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <motion.div
-            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            style={{ willChange: 'auto', zIndex: 1 }}
-            className="glass rounded-xl p-6"
+          <div
+            className="glass rounded-xl p-6 animate-fade-up transition-all duration-300 hover:scale-[1.02]"
+            style={{ animationDelay: '100ms' }}
           >
             <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
             <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            style={{ willChange: 'auto', zIndex: 1 }}
-            className="glass rounded-xl p-6"
+          <div
+            className="glass rounded-xl p-6 animate-fade-up transition-all duration-300 hover:scale-[1.02]"
+            style={{ animationDelay: '200ms' }}
           >
             <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
             <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-            animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            style={{ willChange: 'auto', zIndex: 1 }}
-            className="glass rounded-xl p-6"
+          <div
+            className="glass rounded-xl p-6 animate-fade-up transition-all duration-300 hover:scale-[1.02]"
+            style={{ animationDelay: '300ms' }}
           >
             <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
             <div className="text-3xl font-bold text-white">{riskScore}%</div>
             <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Font Overview */}
-        <motion.div
-          initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-          animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          style={{ willChange: 'auto', zIndex: 1 }}
-          className="glass rounded-xl p-6 mb-8"
+        <div
+          className="glass rounded-xl p-6 mb-8 animate-fade-up"
+          style={{ animationDelay: '400ms' }}
         >
           <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -154,14 +135,12 @@ export default function CompanyDashboard() {
               <div className="text-sm text-gray-400">Enrichment Rate</div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Persona Views */}
-        <motion.div
-          initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-          animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          style={{ willChange: 'auto', zIndex: 1 }}
+        <div
+          className="animate-fade-up"
+          style={{ animationDelay: '500ms' }}
         >
           <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -171,22 +150,18 @@ export default function CompanyDashboard() {
                 to={`/dashboard/${params.company}/${persona.id}`}
                 className="block"
               >
-                <motion.div
-                  initial={isClient ? { scale: 0.95, filter: 'brightness(0.8)' } : {}}
-                  animate={isClient ? { scale: 1, filter: 'brightness(1)' } : {}}
-                  transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
-                  whileHover={{ scale: 1.02 }}
-                  style={{ willChange: 'auto', zIndex: 1 }}
-                  className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all"
+                <div
+                  className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-scale-in"
+                  style={{ animationDelay: `${600 + index * 100}ms` }}
                 >
                   <persona.icon className="w-8 h-8 text-primary mb-3" />
                   <h3 className="font-semibold text-white mb-2">{persona.name}</h3>
                   <p className="text-sm text-gray-400">View tailored insights</p>
-                </motion.div>
+                </div>
               </Link>
             ))}
           </div>
-        </motion.div>
+        </div>
       </main>
         </>
       )}
