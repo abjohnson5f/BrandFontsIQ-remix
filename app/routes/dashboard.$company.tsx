@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useParams } from "@remix-run/react";
+import { useLoaderData, useParams, Outlet } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
@@ -39,6 +39,9 @@ export default function CompanyDashboard() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
+  // Check if we're on a persona route
+  const isPersonaRoute = params.persona !== undefined;
 
   // Use stats from company data
   const uniqueFonts = company.stats.unique_fonts;
@@ -61,25 +64,30 @@ export default function CompanyDashboard() {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Page Header */}
-      <header className="border-b border-gray-800 mt-16">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/" className="text-gray-400 hover:text-white transition-colors">
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-white">{company.display_name}</h1>
-                <p className="text-sm text-gray-400">{company.industry}</p>
+      {/* Show Outlet for persona routes, otherwise show company dashboard */}
+      {isPersonaRoute ? (
+        <Outlet />
+      ) : (
+        <>
+          {/* Page Header */}
+          <header className="border-b border-gray-800 mt-16">
+            <div className="container mx-auto px-4 py-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Link to="/" className="text-gray-400 hover:text-white transition-colors">
+                    <ArrowLeft className="w-5 h-5" />
+                  </Link>
+                  <div>
+                    <h1 className="text-2xl font-bold text-white">{company.display_name}</h1>
+                    <p className="text-sm text-gray-400">{company.industry}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+          {/* Main Content */}
+          <main className="container mx-auto px-4 py-8">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <motion.div
@@ -180,6 +188,8 @@ export default function CompanyDashboard() {
           </div>
         </motion.div>
       </main>
+        </>
+      )}
     </div>
   );
 }
