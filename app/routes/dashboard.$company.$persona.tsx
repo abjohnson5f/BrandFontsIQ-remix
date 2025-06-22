@@ -100,7 +100,7 @@ const MetricCard = ({
   const countValue = useCountUp({
     end: format === 'currency' ? value / 1000000000 : value,
     duration: 2500,
-    decimals: format === 'currency' ? 3 : 0,
+    decimals: format === 'currency' ? 2 : 0,
     prefix: format === 'currency' ? '$' : '',
     suffix: format === 'currency' ? 'B' : format === 'multiple' ? 'x' : format === 'percentage' ? '%' : ''
   });
@@ -182,7 +182,7 @@ const ValueStreamCard = ({
             </div>
             <h3 className="font-semibold text-white">{title}</h3>
           </div>
-          <p className="text-2xl font-bold text-white">{useCountUp({ end: parseFloat(value.replace(/[$BM]/g, '')), duration: 2000, decimals: value.includes('.') ? 2 : 0, prefix: '$', suffix: value.includes('B') ? 'B' : 'M' })}</p>
+          <p className="text-2xl font-bold text-white">{value}</p>
         </div>
         
         <div className="space-y-4">
@@ -230,7 +230,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">Executive Typography Analysis</h1>
               <p className="text-gray-400 text-lg">
-                Strategic value creation through typography optimization for {company.name}
+                Strategic value creation through typography optimization for {company.display_name || company.name}
               </p>
             </div>
             <div className="flex items-center gap-4">

@@ -19,10 +19,19 @@ export function useCountUp({
   suffix = '',
   separator = ','
 }: UseCountUpOptions) {
-  const [count, setCount] = useState(start);
+  // Start with the end value for SSR
+  const [count, setCount] = useState(end);
 
   useEffect(() => {
+    // Only run animation on client
+    if (typeof window === 'undefined') return;
+    
+    // Reset to start value when component mounts on client
+    setCount(start);
+    
     let startTimestamp: number | null = null;
+    let animationFrame: number;
+    
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
@@ -30,15 +39,23 @@ export function useCountUp({
       // Easing function for more natural feel
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       
-      setCount(Math.floor(easeOutQuart * (end - start) + start));
+      const currentValue = easeOutQuart * (end - start) + start;
+      setCount(decimals > 0 ? currentValue : Math.floor(currentValue));
       
       if (progress < 1) {
-        window.requestAnimationFrame(step);
+        animationFrame = window.requestAnimationFrame(step);
       }
     };
     
-    window.requestAnimationFrame(step);
-  }, [start, end, duration]);
+    animationFrame = window.requestAnimationFrame(step);
+    
+    // Cleanup
+    return () => {
+      if (animationFrame) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [start, end, duration, decimals]);
 
   // Format the number with separators
   const formattedValue = count.toLocaleString('en-US', {
