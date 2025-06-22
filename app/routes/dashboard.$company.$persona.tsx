@@ -19,6 +19,7 @@ import {
   Gauge,
   FileText
 } from "lucide-react";
+import { useCountUp } from "~/hooks/useCountUp";
 
 // Import our executive dashboard components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
@@ -83,8 +84,7 @@ const MetricCard = ({
   trend = "up",
   emphasis = false,
   icon: Icon,
-  color = "primary",
-  delay = 0
+  color = "primary"
 }: any) => {
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
   const trendColor = trend === "up" ? "text-emerald-400" : "text-red-400";
@@ -97,8 +97,16 @@ const MetricCard = ({
     danger: "from-red-500/20 to-pink-500/20 border-red-500/20"
   };
   
+  const countValue = useCountUp({
+    end: format === 'currency' ? value / 1000000000 : value,
+    duration: 2500,
+    decimals: format === 'currency' ? 3 : 0,
+    prefix: format === 'currency' ? '$' : '',
+    suffix: format === 'currency' ? 'B' : format === 'multiple' ? 'x' : format === 'percentage' ? '%' : ''
+  });
+  
   return (
-    <div className={`relative ${emphasis ? 'md:col-span-2' : ''} animate-fade-up`} style={{ animationDelay: `${delay}ms` }}>
+    <div className={`relative ${emphasis ? 'md:col-span-2' : ''}`}>
       <div className={`glass relative overflow-hidden rounded-xl border ${colorClasses[color]} bg-gradient-to-br ${emphasis ? 'p-8' : 'p-6'} transition-all duration-300 hover:scale-[1.02] hover:shadow-lg`}>
         {/* Background decoration */}
         <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
@@ -125,9 +133,7 @@ const MetricCard = ({
           <div className="flex items-end justify-between">
             <div>
               <p className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
-                {format === 'currency' ? `$${(value / 1000000000).toFixed(2)}B` : 
-                 format === 'multiple' ? `${value.toLocaleString()}x` :
-                 format === 'percentage' ? `${value}%` : value.toLocaleString()}
+                {countValue}
               </p>
             </div>
             
@@ -152,8 +158,7 @@ const ValueStreamCard = ({
   value, 
   metrics, 
   icon: Icon, 
-  color,
-  delay = 0 
+  color
 }: any) => {
   const colorClasses = {
     green: "from-emerald-500/20 to-green-500/20 border-emerald-500/20",
@@ -168,7 +173,7 @@ const ValueStreamCard = ({
   };
   
   return (
-    <div className="h-full animate-scale-in" style={{ animationDelay: `${delay}ms` }}>
+    <div className="h-full">
       <div className={`glass rounded-xl border ${colorClasses[color]} bg-gradient-to-br p-6 h-full transition-all duration-300 hover:shadow-xl`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -177,7 +182,7 @@ const ValueStreamCard = ({
             </div>
             <h3 className="font-semibold text-white">{title}</h3>
           </div>
-          <p className="text-2xl font-bold text-white">{value}</p>
+          <p className="text-2xl font-bold text-white">{useCountUp({ end: parseFloat(value.replace(/[$BM]/g, '')), duration: 2000, decimals: value.includes('.') ? 2 : 0, prefix: '$', suffix: value.includes('B') ? 'B' : 'M' })}</p>
         </div>
         
         <div className="space-y-4">
@@ -218,7 +223,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
       <div className="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5" />
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
       
-      <div className="relative z-10 p-8 animate-fade-in">
+      <div className="relative z-10 p-8">
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -252,7 +257,6 @@ function ExecutiveDashboard({ company }: { company: any }) {
             emphasis={true}
             icon={CircleDollarSign}
             color="success"
-            delay={100}
           />
           
           <MetricCard
@@ -262,7 +266,6 @@ function ExecutiveDashboard({ company }: { company: any }) {
             subtitle={`${MOCK_DATA.roi.paybackMonths} month payback`}
             icon={TrendingUp}
             color="primary"
-            delay={200}
           />
           
           <MetricCard
@@ -273,7 +276,6 @@ function ExecutiveDashboard({ company }: { company: any }) {
             subtitle="Potential uplift"
             icon={Gauge}
             color="warning"
-            delay={300}
           />
         </div>
 
@@ -293,7 +295,6 @@ function ExecutiveDashboard({ company }: { company: any }) {
               value="$6.96B"
               icon={DollarSign}
               color="green"
-              delay={400}
               metrics={[
                 { name: "Customer Lifetime Value", value: "+18%", progress: 75, status: "positive" },
                 { name: "Conversion Rate", value: "+3.2%", progress: 45, status: "positive" },
@@ -307,7 +308,6 @@ function ExecutiveDashboard({ company }: { company: any }) {
               value="$582M"
               icon={Zap}
               color="blue"
-              delay={500}
               metrics={[
                 { name: "Page Load Performance", value: "+42%", progress: 85, status: "positive" },
                 { name: "Mobile Optimization", value: "+28%", progress: 70, status: "positive" },
@@ -321,7 +321,6 @@ function ExecutiveDashboard({ company }: { company: any }) {
               value="$300M"
               icon={Shield}
               color="purple"
-              delay={600}
               metrics={[
                 { name: "License Compliance", value: "100%", progress: 100, status: "positive" },
                 { name: "WCAG Compliance", value: "AA+", progress: 95, status: "positive" },
@@ -333,22 +332,22 @@ function ExecutiveDashboard({ company }: { company: any }) {
         </div>
 
         {/* Investment Summary */}
-        <div className="animate-fade-in" style={{ animationDelay: '700ms' }}>
+        <div>
           <div className="glass rounded-xl p-8 bg-gradient-to-br from-gray-900/50 to-gray-800/50 border border-gray-700 transition-all duration-300 hover:border-gray-600">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <p className="text-sm text-gray-400 mb-2">Total Investment Required</p>
-                <p className="text-3xl font-bold text-white">$720K</p>
+                <p className="text-3xl font-bold text-white">{useCountUp({ end: 720, duration: 2000, prefix: '$', suffix: 'K' })}</p>
                 <p className="text-sm text-gray-500 mt-1">One-time + Annual</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Implementation Timeline</p>
-                <p className="text-3xl font-bold text-white">12-16</p>
+                <p className="text-3xl font-bold text-white">{useCountUp({ end: 14, duration: 1500 })}</p>
                 <p className="text-sm text-gray-500 mt-1">Weeks to full value</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Net Annual Value</p>
-                <p className="text-3xl font-bold text-emerald-400">$7.841B</p>
+                <p className="text-3xl font-bold text-emerald-400">{useCountUp({ end: 7.841, duration: 2500, decimals: 3, prefix: '$', suffix: 'B' })}</p>
                 <p className="text-sm text-gray-500 mt-1">After all costs</p>
               </div>
             </div>

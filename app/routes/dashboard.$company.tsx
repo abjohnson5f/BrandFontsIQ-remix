@@ -5,6 +5,7 @@ import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
+import { useCountUp } from "~/hooks/useCountUp";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
@@ -84,37 +85,33 @@ export default function CompanyDashboard() {
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div
-            className="glass rounded-xl p-6 animate-fade-up transition-all duration-300 hover:scale-[1.02]"
-            style={{ animationDelay: '100ms' }}
+            className="glass rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
-            <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-white">{useCountUp({ end: economicImpact, duration: 2000, prefix: '$' })}</div>
             <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
           </div>
 
           <div
-            className="glass rounded-xl p-6 animate-fade-up transition-all duration-300 hover:scale-[1.02]"
-            style={{ animationDelay: '200ms' }}
+            className="glass rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
-            <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-white">{useCountUp({ end: efficiencyGain, duration: 2000 })}</div>
             <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
           </div>
 
           <div
-            className="glass rounded-xl p-6 animate-fade-up transition-all duration-300 hover:scale-[1.02]"
-            style={{ animationDelay: '300ms' }}
+            className="glass rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
-            <div className="text-3xl font-bold text-white">{riskScore}%</div>
+            <div className="text-3xl font-bold text-white">{useCountUp({ end: riskScore, duration: 2000, suffix: '%' })}</div>
             <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
           </div>
         </div>
 
         {/* Font Overview */}
         <div
-          className="glass rounded-xl p-6 mb-8 animate-fade-up"
-          style={{ animationDelay: '400ms' }}
+          className="glass rounded-xl p-6 mb-8"
         >
           <h2 className="text-xl font-semibold text-white mb-4">Font Portfolio Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -138,10 +135,7 @@ export default function CompanyDashboard() {
         </div>
 
         {/* Persona Views */}
-        <div
-          className="animate-fade-up"
-          style={{ animationDelay: '500ms' }}
-        >
+        <div>
           <h2 className="text-xl font-semibold text-white mb-4">Persona Views</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {personas.map((persona, index) => (
@@ -151,8 +145,7 @@ export default function CompanyDashboard() {
                 className="block"
               >
                 <div
-                  className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-scale-in"
-                  style={{ animationDelay: `${600 + index * 100}ms` }}
+                  className="glass-card rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
                 >
                   <persona.icon className="w-8 h-8 text-primary mb-3" />
                   <h3 className="font-semibold text-white mb-2">{persona.name}</h3>
