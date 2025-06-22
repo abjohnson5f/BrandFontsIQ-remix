@@ -22,7 +22,7 @@ export function PersonaSidebar({ companyName, stats = {} }: PersonaSidebarProps)
   const currentPersona = params.persona;
 
   return (
-    <aside className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] glass-header border-r border-gray-800/50 overflow-y-auto z-10">
+    <aside className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] glass-dark border-r border-gray-800/50 overflow-y-auto z-10">
       <div className="p-6">
         {/* Company Name */}
         <div className="mb-8">
