@@ -19,6 +19,8 @@ import {
   Gauge,
   FileText
 } from "lucide-react";
+import { MetricValue } from "~/components/metric-value";
+import { AnimatedNumber } from "~/components/animated-number";
 
 // Import our executive dashboard components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
@@ -124,11 +126,14 @@ const MetricCard = ({
           
           <div className="flex items-end justify-between">
             <div>
-              <p className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
-                {format === 'currency' ? `$${(value / 1000000000).toFixed(2)}B` : 
-                 format === 'multiple' ? `${value.toLocaleString()}x` :
-                 format === 'percentage' ? `${value}%` : value.toLocaleString()}
-              </p>
+              <MetricValue 
+                value={
+                  format === 'currency' ? `$${(value / 1000000000).toFixed(2)}B` : 
+                  format === 'multiple' ? `${value.toLocaleString()}x` :
+                  format === 'percentage' ? `${value}%` : value.toLocaleString()
+                }
+                className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}
+              />
             </div>
             
             {improvement && (
@@ -176,7 +181,7 @@ const ValueStreamCard = ({
             </div>
             <h3 className="font-semibold text-white">{title}</h3>
           </div>
-          <p className="text-2xl font-bold text-white">{value}</p>
+          <AnimatedNumber value={value} className="text-2xl font-bold text-white" />
         </div>
         
         <div className="space-y-4">
@@ -331,17 +336,17 @@ function ExecutiveDashboard({ company }: { company: any }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <p className="text-sm text-gray-400 mb-2">Total Investment Required</p>
-                <p className="text-3xl font-bold text-white">$720K</p>
+                <MetricValue value="$720K" className="text-3xl font-bold text-white" />
                 <p className="text-sm text-gray-500 mt-1">One-time + Annual</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Implementation Timeline</p>
-                <p className="text-3xl font-bold text-white">12-16</p>
+                <MetricValue value="12-16" className="text-3xl font-bold text-white" />
                 <p className="text-sm text-gray-500 mt-1">Weeks to full value</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Net Annual Value</p>
-                <p className="text-3xl font-bold text-emerald-400">$7.841B</p>
+                <MetricValue value="$7.841B" className="text-3xl font-bold text-emerald-400" />
                 <p className="text-sm text-gray-500 mt-1">After all costs</p>
               </div>
             </div>
