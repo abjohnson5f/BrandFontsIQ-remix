@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface UseCountUpOptions {
   start?: number;
@@ -19,20 +19,24 @@ export function useCountUp({
   suffix = '',
   separator = ','
 }: UseCountUpOptions) {
-  // Start with the end value for SSR
   const [count, setCount] = useState(end);
+  const [isMounted, setIsMounted] = useState(false);
+  const animationRef = useRef<number>();
 
   useEffect(() => {
-    // Only run animation on client
-    if (typeof window === 'undefined') return;
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    // Only run animation on client after mount
+    if (!isMounted || typeof window === 'undefined') return;
     
-    // Reset to start value when component mounts on client
+    // Reset to start value
     setCount(start);
     
     let startTimestamp: number | null = null;
-    let animationFrame: number;
     
-    const step = (timestamp: number) => {
+    const animate = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
       
@@ -43,19 +47,23 @@ export function useCountUp({
       setCount(decimals > 0 ? currentValue : Math.floor(currentValue));
       
       if (progress < 1) {
-        animationFrame = window.requestAnimationFrame(step);
+        animationRef.current = requestAnimationFrame(animate);
       }
     };
     
-    animationFrame = window.requestAnimationFrame(step);
+    // Start animation after a small delay
+    const timer = setTimeout(() => {
+      animationRef.current = requestAnimationFrame(animate);
+    }, 50);
     
     // Cleanup
     return () => {
-      if (animationFrame) {
-        window.cancelAnimationFrame(animationFrame);
+      clearTimeout(timer);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [start, end, duration, decimals]);
+  }, [isMounted, start, end, duration, decimals]);
 
   // Format the number with separators
   const formattedValue = count.toLocaleString('en-US', {
