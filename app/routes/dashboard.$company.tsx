@@ -5,7 +5,6 @@ import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
-import { AnimatedCounter } from "~/components/animated-counter";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug } = params;
@@ -88,9 +87,7 @@ export default function CompanyDashboard() {
             className="glass rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="text-sm text-gray-400 mb-2">Economic Impact</div>
-            <div className="text-3xl font-bold text-white">
-              <AnimatedCounter value={economicImpact} prefix="$" />
-            </div>
+            <div className="text-3xl font-bold text-white">${economicImpact.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Annual value generated</div>
           </div>
 
@@ -98,9 +95,7 @@ export default function CompanyDashboard() {
             className="glass rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="text-sm text-gray-400 mb-2">Efficiency Gains</div>
-            <div className="text-3xl font-bold text-white">
-              <AnimatedCounter value={efficiencyGain} />
-            </div>
+            <div className="text-3xl font-bold text-white">{efficiencyGain.toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">Hours saved per year</div>
           </div>
 
@@ -108,9 +103,7 @@ export default function CompanyDashboard() {
             className="glass rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="text-sm text-gray-400 mb-2">Risk Mitigation Score</div>
-            <div className="text-3xl font-bold text-white">
-              <AnimatedCounter value={riskScore} format="percentage" />
-            </div>
+            <div className="text-3xl font-bold text-white">{riskScore}%</div>
             <div className="text-xs text-gray-500 mt-1">Compliance & protection</div>
           </div>
         </div>

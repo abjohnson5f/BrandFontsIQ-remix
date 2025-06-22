@@ -19,7 +19,6 @@ import {
   Gauge,
   FileText
 } from "lucide-react";
-import { AnimatedCounter } from "~/components/animated-counter";
 
 // Import our executive dashboard components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
@@ -125,13 +124,11 @@ const MetricCard = ({
           
           <div className="flex items-end justify-between">
             <div>
-              <div className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
-                <AnimatedCounter 
-                  value={value} 
-                  format={format}
-                  decimals={format === 'currency' ? 2 : 0}
-                />
-              </div>
+              <p className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
+                {format === 'currency' ? `$${(value / 1000000000).toFixed(2)}B` : 
+                 format === 'multiple' ? `${value.toLocaleString()}x` :
+                 format === 'percentage' ? `${value}%` : value.toLocaleString()}
+              </p>
             </div>
             
             {improvement && (
@@ -334,23 +331,17 @@ function ExecutiveDashboard({ company }: { company: any }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <p className="text-sm text-gray-400 mb-2">Total Investment Required</p>
-                <div className="text-3xl font-bold text-white">
-                  <AnimatedCounter value={720} prefix="$" suffix="K" />
-                </div>
+                <p className="text-3xl font-bold text-white">$720K</p>
                 <p className="text-sm text-gray-500 mt-1">One-time + Annual</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Implementation Timeline</p>
-                <div className="text-3xl font-bold text-white">
-                  <AnimatedCounter value={14} />
-                </div>
+                <p className="text-3xl font-bold text-white">12-16</p>
                 <p className="text-sm text-gray-500 mt-1">Weeks to full value</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Net Annual Value</p>
-                <div className="text-3xl font-bold text-emerald-400">
-                  <AnimatedCounter value={7841} format="currency" decimals={3} />
-                </div>
+                <p className="text-3xl font-bold text-emerald-400">$7.841B</p>
                 <p className="text-sm text-gray-500 mt-1">After all costs</p>
               </div>
             </div>
