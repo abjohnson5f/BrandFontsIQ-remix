@@ -70,7 +70,6 @@ export default function CompanyDashboard() {
       ) : (
         <>
           <Header />
-        <>
           {/* Page Header */}
           <header className="border-b border-gray-800 mt-16">
             <div className="container mx-auto px-4 py-6">
