@@ -399,21 +399,19 @@ export default function PersonaView() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <div className="w-64">
-        <PersonaSidebar 
-          companyName={company.display_name || company.name} 
-          stats={{
-            totalValue: '$7.84B',
-            roi: '10,874x',
-            fontInstances: company.stats?.total_instances || 263
-          }}
-        />
-      </div>
+      <PersonaSidebar 
+        companyName={company.display_name || company.name} 
+        stats={{
+          totalValue: '$7.84B',
+          roi: '10,874x',
+          fontInstances: company.stats?.total_instances || 263
+        }}
+      />
       
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
+      {/* Main Content with margin-left to account for fixed sidebar */}
+      <div className="ml-64">
         {/* Show Executive Dashboard for executive persona, Coming Soon for others */}
         {persona === 'executive' ? (
           <ExecutiveDashboard company={company} />
