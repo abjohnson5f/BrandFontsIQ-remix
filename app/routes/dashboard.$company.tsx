@@ -1,8 +1,9 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useParams, Outlet } from "@remix-run/react";
+import { useLoaderData, useParams, Outlet, useNavigate } from "@remix-run/react";
 import { ArrowLeft, Users, FileText, Shield, TrendingUp } from "lucide-react";
 import { Link } from "@remix-run/react";
+import { useEffect } from "react";
 import { companiesData } from "~/lib/companies-data";
 import { Header } from "~/components/header";
 
@@ -32,6 +33,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CompanyDashboard() {
   const { company, fontUsage, metrics } = useLoaderData<typeof loader>();
   const params = useParams();
+  const navigate = useNavigate();
+  
+  // Redirect to executive view if no persona is specified
+  useEffect(() => {
+    if (!params.persona && params.company) {
+      navigate(`/dashboard/${params.company}/executive`, { replace: true });
+    }
+  }, [params.persona, params.company, navigate]);
   
   // Check if we're on a persona route
   const isPersonaRoute = params.persona !== undefined;

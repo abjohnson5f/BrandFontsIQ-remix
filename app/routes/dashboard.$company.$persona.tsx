@@ -23,6 +23,7 @@ import {
 // Import our executive dashboard components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
+import { PersonaSidebar } from "~/components/persona-sidebar";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { company: companySlug, persona } = params;
@@ -370,9 +371,9 @@ function ComingSoon({ company, persona, personaName }: any) {
   const params = useParams();
   
   return (
-    <main className="container mx-auto px-4 py-20">
-      <div className="max-w-2xl mx-auto text-center">
-        <div className="glass rounded-2xl p-12">
+    <div className="min-h-screen bg-background flex items-center justify-center p-8">
+      <div className="max-w-2xl w-full">
+        <div className="glass rounded-2xl p-12 text-center">
           <Clock className="w-16 h-16 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-white mb-4">Coming Soon</h2>
           <p className="text-gray-400 mb-8">
@@ -380,16 +381,9 @@ function ComingSoon({ company, persona, personaName }: any) {
             This view will provide customized metrics, visualizations, and recommendations
             based on your role's unique needs.
           </p>
-          <Link
-            to={`/dashboard/${params.company}`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -405,33 +399,26 @@ export default function PersonaView() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link 
-                to={`/dashboard/${params.company}`} 
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-white">{company.name}</h1>
-                <p className="text-sm text-gray-400">{personaNames[persona]}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Show Executive Dashboard for executive persona, Coming Soon for others */}
-      {persona === 'executive' ? (
-        <ExecutiveDashboard company={company} />
-      ) : (
-        <ComingSoon company={company} persona={persona} personaName={personaNames[persona]} />
-      )}
+    <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <PersonaSidebar 
+        companyName={company.display_name || company.name} 
+        stats={{
+          totalValue: '$7.84B',
+          roi: '10,874x',
+          fontInstances: company.stats?.total_instances || 263
+        }}
+      />
+      
+      {/* Main Content */}
+      <div className="flex-1">
+        {/* Show Executive Dashboard for executive persona, Coming Soon for others */}
+        {persona === 'executive' ? (
+          <ExecutiveDashboard company={company} />
+        ) : (
+          <ComingSoon company={company} persona={persona} personaName={personaNames[persona]} />
+        )}
+      </div>
     </div>
   );
 }
