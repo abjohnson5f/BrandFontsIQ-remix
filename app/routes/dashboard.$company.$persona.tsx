@@ -19,7 +19,7 @@ import {
   Gauge,
   FileText
 } from "lucide-react";
-import { useCountUp } from "~/hooks/useCountUp";
+import { AnimatedCounter } from "~/components/animated-counter";
 
 // Import our executive dashboard components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
@@ -97,13 +97,6 @@ const MetricCard = ({
     danger: "from-red-500/20 to-pink-500/20 border-red-500/20"
   };
   
-  const countValue = useCountUp({
-    end: format === 'currency' ? value / 1000000000 : value,
-    duration: 2500,
-    decimals: format === 'currency' ? 2 : 0,
-    prefix: format === 'currency' ? '$' : '',
-    suffix: format === 'currency' ? 'B' : format === 'multiple' ? 'x' : format === 'percentage' ? '%' : ''
-  });
   
   return (
     <div className={`relative ${emphasis ? 'md:col-span-2' : ''}`}>
@@ -132,9 +125,13 @@ const MetricCard = ({
           
           <div className="flex items-end justify-between">
             <div>
-              <p className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
-                {countValue}
-              </p>
+              <div className={`${emphasis ? 'text-5xl' : 'text-4xl'} font-bold text-white tracking-tight`}>
+                <AnimatedCounter 
+                  value={value} 
+                  format={format}
+                  decimals={format === 'currency' ? 2 : 0}
+                />
+              </div>
             </div>
             
             {improvement && (
@@ -337,17 +334,23 @@ function ExecutiveDashboard({ company }: { company: any }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <p className="text-sm text-gray-400 mb-2">Total Investment Required</p>
-                <p className="text-3xl font-bold text-white">{useCountUp({ end: 720, duration: 2000, prefix: '$', suffix: 'K' })}</p>
+                <div className="text-3xl font-bold text-white">
+                  <AnimatedCounter value={720} prefix="$" suffix="K" />
+                </div>
                 <p className="text-sm text-gray-500 mt-1">One-time + Annual</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Implementation Timeline</p>
-                <p className="text-3xl font-bold text-white">{useCountUp({ end: 14, duration: 1500 })}</p>
+                <div className="text-3xl font-bold text-white">
+                  <AnimatedCounter value={14} />
+                </div>
                 <p className="text-sm text-gray-500 mt-1">Weeks to full value</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-2">Net Annual Value</p>
-                <p className="text-3xl font-bold text-emerald-400">{useCountUp({ end: 7.841, duration: 2500, decimals: 3, prefix: '$', suffix: 'B' })}</p>
+                <div className="text-3xl font-bold text-emerald-400">
+                  <AnimatedCounter value={7841} format="currency" decimals={3} />
+                </div>
                 <p className="text-sm text-gray-500 mt-1">After all costs</p>
               </div>
             </div>
