@@ -49,7 +49,7 @@ export function CompanyCard({ company, index, isHovered, onHoverStart, onHoverEn
   
   return (
     <Link
-      to={`/dashboard/${company.schema_name}`}
+      to={`/dashboard/${company.schema_name}/executive`}
       className="block"
     >
       <motion.div

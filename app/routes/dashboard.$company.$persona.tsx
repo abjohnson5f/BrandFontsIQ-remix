@@ -213,10 +213,10 @@ const ValueStreamCard = ({
 // Executive Dashboard Component
 function ExecutiveDashboard({ company }: { company: any }) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
       {/* Gradient background effect */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent pointer-events-none" />
       
       <div className="relative z-10 p-8">
         {/* Header Section */}
@@ -401,17 +401,19 @@ export default function PersonaView() {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <PersonaSidebar 
-        companyName={company.display_name || company.name} 
-        stats={{
-          totalValue: '$7.84B',
-          roi: '10,874x',
-          fontInstances: company.stats?.total_instances || 263
-        }}
-      />
+      <div className="w-64">
+        <PersonaSidebar 
+          companyName={company.display_name || company.name} 
+          stats={{
+            totalValue: '$7.84B',
+            roi: '10,874x',
+            fontInstances: company.stats?.total_instances || 263
+          }}
+        />
+      </div>
       
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         {/* Show Executive Dashboard for executive persona, Coming Soon for others */}
         {persona === 'executive' ? (
           <ExecutiveDashboard company={company} />
