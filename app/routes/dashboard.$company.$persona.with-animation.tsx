@@ -2,6 +2,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useParams, Link } from "@remix-run/react";
 import { companiesData } from "~/lib/companies-data";
+import { motion } from "framer-motion";
 import { 
   ArrowLeft, 
   Clock, 
@@ -12,12 +13,15 @@ import {
   DollarSign,
   Zap,
   Shield,
+  BarChart3,
   Activity,
   Target,
+  AlertTriangle,
   CheckCircle,
   CircleDollarSign,
   Gauge,
-  FileText
+  FileText,
+  Download
 } from "lucide-react";
 
 // Import our executive dashboard components
@@ -97,7 +101,9 @@ const MetricCard = ({
   };
   
   return (
-    <div className={`relative ${emphasis ? 'md:col-span-2' : ''}`}>
+    <div
+      className={`relative ${emphasis ? 'md:col-span-2' : ''}`}
+    >
       <div className={`glass relative overflow-hidden rounded-xl border ${colorClasses[color]} bg-gradient-to-br ${emphasis ? 'p-8' : 'p-6'}`}>
         {/* Background decoration */}
         <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
@@ -141,7 +147,7 @@ const MetricCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -166,7 +172,12 @@ const ValueStreamCard = ({
   };
   
   return (
-    <div className="h-full">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="h-full"
+    >
       <div className={`glass rounded-xl border ${colorClasses[color]} bg-gradient-to-br p-6 h-full`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -191,9 +202,11 @@ const ValueStreamCard = ({
                 </span>
               </div>
               <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                <div
-                  style={{ width: `${metric.progress}%` }}
-                  className={`h-full rounded-full bg-gradient-to-r transition-all duration-700 ${
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${metric.progress}%` }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className={`h-full rounded-full bg-gradient-to-r ${
                     color === 'green' ? 'from-emerald-500 to-green-400' :
                     color === 'blue' ? 'from-blue-500 to-cyan-400' :
                     'from-purple-500 to-pink-400'
@@ -204,7 +217,7 @@ const ValueStreamCard = ({
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -218,7 +231,11 @@ function ExecutiveDashboard({ company }: { company: any }) {
       
       <div className="relative z-10 p-8">
         {/* Header Section */}
-        <div className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">Executive Typography Analysis</h1>
@@ -227,17 +244,25 @@ function ExecutiveDashboard({ company }: { company: any }) {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="glass px-6 py-3 rounded-lg border border-gray-700 hover:border-gray-600 transition-all flex items-center gap-2">
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="glass px-6 py-3 rounded-lg border border-gray-700 hover:border-gray-600 transition-all flex items-center gap-2"
+              >
                 <FileText className="h-4 w-4" />
                 <span className="text-sm font-medium">Export Report</span>
-              </button>
-              <button className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center gap-2">
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center gap-2"
+              >
                 <Target className="h-4 w-4" />
                 <span className="text-sm">View Actions</span>
-              </button>
+              </motion.button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -273,7 +298,12 @@ function ExecutiveDashboard({ company }: { company: any }) {
         </div>
 
         {/* Value Streams Section */}
-        <div className="mb-8">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mb-8"
+        >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">Value Creation Breakdown</h2>
             <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -322,10 +352,14 @@ function ExecutiveDashboard({ company }: { company: any }) {
               ]}
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Investment Summary */}
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
           <div className="glass rounded-xl p-8 bg-gradient-to-br from-gray-900/50 to-gray-800/50 border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
@@ -358,7 +392,7 @@ function ExecutiveDashboard({ company }: { company: any }) {
               </Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -370,7 +404,11 @@ function ComingSoon({ company, persona, personaName }: any) {
   
   return (
     <main className="container mx-auto px-4 py-20">
-      <div className="max-w-2xl mx-auto text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-2xl mx-auto text-center"
+      >
         <div className="glass rounded-2xl p-12">
           <Clock className="w-16 h-16 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-white mb-4">Coming Soon</h2>
@@ -387,7 +425,7 @@ function ComingSoon({ company, persona, personaName }: any) {
             Back to Dashboard
           </Link>
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 }
