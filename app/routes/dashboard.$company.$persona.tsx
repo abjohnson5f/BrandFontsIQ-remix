@@ -399,7 +399,7 @@ export default function PersonaView() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-16">
       {/* Sidebar */}
       <PersonaSidebar 
         companyName={company.display_name || company.name} 

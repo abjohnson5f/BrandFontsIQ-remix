@@ -64,12 +64,12 @@ export default function CompanyDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       {/* Show Outlet for persona routes, otherwise show company dashboard */}
       {isPersonaRoute ? (
         <Outlet />
       ) : (
         <>
-          <Header />
           {/* Page Header */}
           <header className="border-b border-gray-800 mt-16">
             <div className="container mx-auto px-4 py-6">
