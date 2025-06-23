@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ThoughtSpot Light Mode Colors */
+    --ts-background: 0 0% 97%; /* #f8f8f8 - Light gray background */
+    --ts-surface: 0 0% 100%; /* #ffffff - White cards */
+    --ts-header: 220 13% 18%; /* #28292f - Dark header */
+    --ts-text-primary: 220 13% 18%; /* Dark text */
+    --ts-text-secondary: 220 9% 46%; /* Gray text */
+    --ts-border: 220 13% 91%; /* Light borders */
+    --ts-accent-blue: 217 91% 60%; /* #4a90e2 - Primary blue */
+    --ts-accent-green: 141 71% 48%; /* Success green */
+    --ts-accent-red: 0 84% 60%; /* Error red */
+    --ts-accent-purple: 262 83% 58%; /* Purple for charts */
+    --ts-accent-orange: 24 95% 53%; /* Orange for charts */
+    
+    /* Shadows */
+    --ts-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    --ts-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+  
+  .dark {
+    /* ThoughtSpot Dark Mode Colors */
+    --ts-background: 220 13% 12%; /* Dark background */
+    --ts-surface: 220 13% 18%; /* Dark surface */
+    --ts-header: 220 13% 8%; /* Darker header */
+    --ts-text-primary: 0 0% 95%; /* Light text */
+    --ts-text-secondary: 220 9% 65%; /* Gray text */
+    --ts-border: 220 13% 25%; /* Dark borders */
+  }
+}
+
+/* Global Styles */
+body {
+  @apply bg-[hsl(var(--ts-background))] text-[hsl(var(--ts-text-primary))];
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ThoughtSpot Header */
+.ts-header {
+  background-color: hsl(var(--ts-header));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ThoughtSpot Card */
+.ts-card {
+  background-color: hsl(var(--ts-surface));
+  border-radius: 8px;
+  box-shadow: var(--ts-shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.ts-card:hover {
+  box-shadow: var(--ts-shadow-md);
+}
+
+/* Tab Navigation */
+.ts-tab {
+  @apply relative px-4 py-2 text-sm font-medium transition-colors;
+  color: hsl(var(--ts-text-secondary));
+}
+
+.ts-tab:hover {
+  color: hsl(var(--ts-text-primary));
+}
+
+.ts-tab.active {
+  color: hsl(var(--ts-accent-blue));
+}
+
+.ts-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: hsl(var(--ts-accent-blue));
+}
+
+/* Metric Cards */
+.ts-metric {
+  @apply p-6;
+}
+
+.ts-metric-label {
+  @apply text-sm font-medium mb-1;
+  color: hsl(var(--ts-text-secondary));
+}
+
+.ts-metric-value {
+  @apply text-3xl font-bold;
+  color: hsl(var(--ts-text-primary));
+}
+
+.ts-metric-change {
+  @apply text-sm font-medium mt-1 flex items-center gap-1;
+}
+
+.ts-metric-change.positive {
+  color: hsl(var(--ts-accent-green));
+}
+
+.ts-metric-change.negative {
+  color: hsl(var(--ts-accent-red));
+}
+
+/* Buttons */
+.ts-button {
+  @apply px-4 py-2 rounded-md font-medium text-sm transition-all;
+  background-color: hsl(var(--ts-accent-blue));
+  color: white;
+}
+
+.ts-button:hover {
+  filter: brightness(1.1);
+}
+
+.ts-button-secondary {
+  @apply px-4 py-2 rounded-md font-medium text-sm transition-all border;
+  background-color: transparent;
+  border-color: hsl(var(--ts-border));
+  color: hsl(var(--ts-text-primary));
+}
+
+/* Filter Dropdown */
+.ts-filter {
+  @apply px-3 py-2 rounded-md text-sm font-medium border bg-white;
+  border-color: hsl(var(--ts-border));
+  color: hsl(var(--ts-text-primary));
+}
+
+/* Chart Container */
+.ts-chart-container {
+  @apply p-6;
+  background-color: hsl(var(--ts-surface));
+  border-radius: 8px;
+  box-shadow: var(--ts-shadow-sm);
+}

@@ -163,6 +163,30 @@ export default function Index() {
       {/* Features Grid */}
       <FeaturesGrid />
 
+      {/* New ThoughtSpot Design Preview */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-2xl font-bold mb-4">🚀 New ThoughtSpot-Inspired Design</h2>
+          <p className="text-gray-600 mb-8">
+            Experience our completely redesigned dashboard with a clean, modern interface inspired by ThoughtSpot's industry-leading design.
+          </p>
+          <div className="flex justify-center gap-4">
+            <Link
+              to="/dashboard/thoughtspot/hormel"
+              className="px-6 py-3 bg-[#4a90e2] text-white rounded-md font-medium hover:bg-[#357abd] transition-colors"
+            >
+              View New Design (Hormel Example)
+            </Link>
+            <Link
+              to="/dashboard/hormel/executive"
+              className="px-6 py-3 border border-gray-300 rounded-md font-medium hover:bg-gray-100 transition-colors"
+            >
+              View Current Design
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Company Showcase */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
