@@ -64,7 +64,7 @@ const initialWidgets: WidgetConfig[] = [
   }
 ];
 
-export default function WidgetDemo() {
+export function WidgetDemoClient() {
   const [widgets, setWidgets] = useState<WidgetConfig[]>(initialWidgets);
   const [isEditing, setIsEditing] = useState(false);
   const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
