@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DashboardGrid } from "~/components/widget-system/dashboard-grid";
 import { widgetRegistry } from "~/lib/widget-system/registry";
 import type { WidgetConfig } from "~/lib/widget-system/types";
@@ -68,6 +68,18 @@ export default function WidgetDemo() {
   const [widgets, setWidgets] = useState<WidgetConfig[]>(initialWidgets);
   const [isEditing, setIsEditing] = useState(false);
   const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
+
+  // Force light mode for this demo
+  useEffect(() => {
+    document.documentElement.classList.remove('dark');
+    document.body.classList.remove('dark', 'bg-background', 'text-foreground', 'bg-gradient-mesh');
+    
+    return () => {
+      // Restore dark mode when leaving the page
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark', 'bg-background', 'text-foreground', 'bg-gradient-mesh');
+    };
+  }, []);
 
   const handleAddWidget = (type: string) => {
     const registryEntry = widgetRegistry.get(type as any);
