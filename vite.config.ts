@@ -9,6 +9,12 @@ export default defineConfig(({ mode }) => {
   server: {
     port: 3005,
     host: true, // Allow external connections in Codespaces
+    fs: {
+      strict: false
+    },
+    hmr: {
+      overlay: false
+    }
   },
   plugins: [
     remix({
