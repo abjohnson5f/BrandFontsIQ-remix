@@ -120,8 +120,8 @@ export function DashboardGrid({
           <div
             key={widget.id}
             className={cn(
-              "relative bg-white rounded-lg shadow-sm border border-gray-200",
-              isEditing && "cursor-move hover:shadow-md transition-shadow",
+              "relative bg-white rounded-lg shadow-sm border",
+              isEditing ? "border-blue-400 cursor-move hover:shadow-lg transition-all" : "border-gray-200",
               draggingWidget === widget.id && "opacity-50"
             )}
             style={{

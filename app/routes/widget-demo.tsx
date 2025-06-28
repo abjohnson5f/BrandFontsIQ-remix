@@ -131,7 +131,10 @@ export default function WidgetDemo() {
                 </>
               ) : (
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => {
+                    console.log('Edit button clicked');
+                    setIsEditing(true);
+                  }}
                   className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
                 >
                   <Edit3 className="w-4 h-4" />
@@ -145,6 +148,13 @@ export default function WidgetDemo() {
 
       {/* Dashboard Grid */}
       <div className="p-6">
+        {/* Debug info */}
+        {isEditing && (
+          <div className="mb-4 p-2 bg-blue-100 text-blue-800 rounded">
+            Edit mode is active - You can now drag widgets
+          </div>
+        )}
+        
         <DashboardGrid
           widgets={widgets}
           isEditing={isEditing}
